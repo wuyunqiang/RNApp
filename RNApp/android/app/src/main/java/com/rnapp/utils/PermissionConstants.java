@@ -1,5 +1,4 @@
-package com.nnshandai.utils;
-
+package com.rnapp.utils;
 /**
  * Created by wuyunqiang on 2018/2/7.
  */

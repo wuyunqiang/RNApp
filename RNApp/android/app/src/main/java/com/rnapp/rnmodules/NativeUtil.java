@@ -1,36 +1,16 @@
-package com.nnshandai.rnmodules;
+package com.rnapp.rnmodules;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
-import android.os.Build;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
+
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.WritableMap;
-import com.nnshandai.MainActivity;
-import com.nnshandai.R;
-import com.nnshandai.utils.CodeUtils;
-import com.nnshandai.utils.ImageUtil;
-import com.nnshandai.utils.Utils;
-
-import java.lang.reflect.Field;
+import com.rnapp.utils.CodeUtils;
+import com.rnapp.utils.Utils;
 
 /**
  * Created by wuyunqiang on 2018/1/2.

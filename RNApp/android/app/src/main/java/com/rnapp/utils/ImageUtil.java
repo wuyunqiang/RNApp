@@ -1,5 +1,4 @@
-package com.nnshandai.utils;
-
+package com.rnapp.utils;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -56,7 +55,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
 
-import static com.nnshandai.MainActivity.TAG;
 
 /**
  * Created by wuyunqiang on 2018/4/17.

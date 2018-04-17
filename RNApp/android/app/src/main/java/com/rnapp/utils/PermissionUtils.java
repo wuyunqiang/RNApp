@@ -2,7 +2,7 @@
  * Created by wuyunqiang on 2018/2/7.
  */
 
-package com.nnshandai.utils;
+package com.rnapp.utils;
 
 import android.app.Activity;
 import android.content.Context;

@@ -1,4 +1,4 @@
-package com.nnshandai.utils;
+package com.rnapp.utils;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
