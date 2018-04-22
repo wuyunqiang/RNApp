@@ -22,8 +22,7 @@ import {
 } from 'react-native';
 import Toast from "react-native-root-toast";
 
-type Props = {};
-export default class Base extends Component<Props> {
+export default class Base extends Component{
 
     render(){
         return <View style={{width:'100%',height:'100%'}}>
@@ -56,12 +55,13 @@ export default class Base extends Component<Props> {
     componentWillMount() {
     }
 
-    componentWillUnmount() {
+    componentWillUnMount() {
         NetInfo.removeEventListener('connectionChange');
         if(Platform.OS==='android'){
             BackHandler.removeEventListener('hardwareBackPress', this.OnBackAndroid);
         }
     }
+
     //声明周期回调结束********************************************************************************************
 
 
