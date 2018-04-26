@@ -18,16 +18,23 @@ import {
     BackHandler,
     NetInfo,
     StatusBar,
-    InteractionManager
+    InteractionManager,
+    NativeModules
 } from 'react-native';
+import { NavigationActions } from 'react-navigation'
+import ModalUtil from '../utils/ModalUtil'
 import Toast from "react-native-root-toast";
-
-export default class Base extends Component{
+import SplashScreen from "react-native-splash-screen";
+import CodePush from 'react-native-code-push';
+import URL from "../utils/Constant";
+type Props = {};
+export default class Base extends Component<Props> {
 
     render(){
         return <View style={{width:'100%',height:'100%'}}>
             {this.renderNonNetWork()}
             {this.renderPage&&this.renderPage()}
+            {this.renderModal(this.contentView,this.state.visible,{justifyContent:'center',alignItems:'center'},'fade')}
         </View>
     }
 
@@ -47,6 +54,34 @@ export default class Base extends Component{
         if(Platform.OS==='android'){
             // BackHandler.addEventListener('hardwareBackPress', this.onBackAndroid);
         }
+        SplashScreen.hide();
+        this.readFile()
+    }
+
+    readFile(){
+        InteractionManager.runAfterInteractions(()=>{
+            READ_CACHE('token',(res)=>{
+                res?HttpUtil.token = res:null;
+                console.log('HttpUtil.token',HttpUtil.token)
+            },(err)=>{
+                console.log('缓存文件读取token 错误',err)
+            });
+
+            READ_CACHE('userinfo',(res)=>{
+                res? CacheData.userinfo = res:null;
+                console.log('CacheData.userinfo',CacheData.userinfo)
+
+            },(err)=>{
+                console.log('缓存文件读取userinfo 错误',err)
+            })
+            READ_CACHE('securityLevel',(res)=>{
+                res? CacheData.securityLevel = res:null;
+                console.log('CacheData.securityLevel',CacheData.securityLevel)
+
+            },(err)=>{
+                console.log('缓存文件读取securityLevel 错误',err)
+            })
+        })
     }
 
     componentWillReceiveProps(nextProps) {
@@ -55,20 +90,25 @@ export default class Base extends Component{
     componentWillMount() {
     }
 
-    componentWillUnMount() {
+    componentWillUnmount() {
         NetInfo.removeEventListener('connectionChange');
         if(Platform.OS==='android'){
             BackHandler.removeEventListener('hardwareBackPress', this.OnBackAndroid);
         }
     }
-
     //声明周期回调结束********************************************************************************************
 
 
     //各种事件函数处理********************************************************************************************
-    //react navigation返回任意页面
-    goBackPage(routers,PageName){
-        console.log('全局路由routers',routers);
+    /**
+     * 不传任何参数或者不传路由 默认返回上一个页面
+     * react navigation返回任意页面
+     * */
+    goBackPage(PageName,routers){
+        if(!routers){
+            this.props.navigation.goBack(null);
+            return;
+        }
         for(let i=0;i<routers.length;i++){
             if(routers[i].routeName==PageName){
                 if(i+1==routers.length){
@@ -82,11 +122,68 @@ export default class Base extends Component{
         }
     };
 
+    /***
+     * 验证是否登录
+     * 验证token失效
+     * **/
+    navigate(page,params){
+        if(!HttpUtil.token){
+            //没有登录显示登录页面
+        }
+        this.props.navigation.navigate(page,params);
+    }
+
+    /***
+     * 可以重定向到tab的某个页面
+     * ***/
+    reset(page,params={}){
+        let resetAction = NavigationActions.reset({
+            index: 0,
+            actions: [
+                NavigationActions.navigate(
+                    {
+                        index: 0,
+                        routeName: 'Index',
+                        action: NavigationActions.navigate({routeName:page,params:params})
+                    }
+                   )
+            ]
+        });
+        this.props.navigation.dispatch(resetAction)
+    }
+
+
+    /***
+     * 请求失败默认弹出弹框
+     * 显示失败信息
+     * ***/
+    async HttpPost(url,params,headers){
+        let res = await HttpUtil.POST(url,params,headers);
+        if(res.status&&res.status!="20000000"){//失败显示错误信息
+            this.setState({
+                visible:true,
+                msg:res.message,
+            });
+            return false;
+        }
+        //成功没有res 里面没有status(一般情况下)
+        return res;
+    }
+
+    /***
+     * 安卓返回键监听
+     *
+     * ***/
     OnBackAndroid = (params) => {
         console.log("testhahahahahahahhaf");
         return false;
     };
 
+
+    /***
+     * 初始化codepush
+     *
+     * ***/
     InitCodePush(){
         CodePush.sync({
             // updateDialog: {
@@ -146,8 +243,32 @@ export default class Base extends Component{
     }
 
     Test(...parmas){
-        this.ShowToast("调用了Base方法");
+        Base.ShowToast("调用了Base方法");
+        this.setState({
+            h:"hahah"
+        },()=>{
+            console.log('this.state',this.state)
+        })
     }
+
+
+    /***
+     * 弹窗关闭
+     * ***/
+    close=()=>{
+        this.setState({
+            visible:false,
+        })
+    }
+
+    /**
+     * 弹框点击确定按钮
+     * ***/
+    confirm=()=>{
+        this.setState({
+            visible:false,
+        })
+    };
 
     /**
      *判断是否有网络
@@ -174,6 +295,60 @@ export default class Base extends Component{
             return false;
         }
     };
+
+
+    //显示对话框
+    showDialog = (msg)=>{
+        if(typeof msg ==='string'){
+            this.setState({
+                visible:true,
+                msg:msg,
+            })
+        }
+        if(typeof msg ==='object'){
+            this.setState({
+                visible:true,
+                msg:msg.message,
+            })
+        }
+    }
+
+    //生成图形验证码图片
+     async GenerateCodeImage(phoneNo,type){
+        let params = {
+            phoneNo:phoneNo,
+            type:type,
+        };
+        let res = await HttpUtil.POST(URL.generateCode,params);
+        if(res.status){//请求失败
+            Base.ShowToast(res.info);
+        }else{
+            if(Platform.OS=='android'){
+                let data = await NativeModules.NativeUtil.VerifyImage(res.generateCode);//获取base64格式的图片
+                console.log('data',data);
+                this.setState({
+                    verifyImage:'data:image/png;base64,'+data.base64,
+                    generateCode:res.generateCode,
+                })
+            }else{
+                let NativeUtil  = NativeModules.NativeUtil;
+                NativeUtil.getBase64Image(res.generateCode).then((code)=>{
+                    this.setState({
+                        verifyImage:code,
+                        generateCode:res.generateCode,
+                    })
+                }).catch((error)=>{
+                    this.setState({
+                        generateCode:res.generateCode,
+                    })
+                })
+            }
+
+        }
+    };
+
+
+
     //各种事件函数处理结束********************************************************************************************
 
 
@@ -182,7 +357,7 @@ export default class Base extends Component{
     /*
     *显示Toast
     * */
-    ShowToast(msg){
+    static ShowToast(msg){
         Toast.show(msg, {
             duration: Toast.durations.LONG,
             position: Toast.positions.BOTTOM,
@@ -209,6 +384,9 @@ export default class Base extends Component{
     renderNonNetWork(){
         if(!this.state.isNet){
             return (<View  style={{width:'100%',height:'100%',backgroundColor:'white', justifyContent:'center', alignItems:'center'}}>
+                <Image
+                    style={{width:229, height:141}}
+                    source={AppImages.Web.nonet}/>
                 <Text style={{fontSize:16,color:"#333333",marginTop:50,marginBottom:60,}}>网络无法刷新，请检查您的网络</Text>
                 <TouchableOpacity style={{width:258,height:35,justifyContent:'center', alignItems:'center'}}
                                   activeOpacity={0.8}
@@ -222,24 +400,43 @@ export default class Base extends Component{
         return null;
     }
 
-    close=()=>{
-        this.setState({
-            visible:false,
-        })
-    }
+
+    /**
+     *显示弹框内容
+     * */
+    contentView = ()=>{
+        return (
+            <TouchableOpacity
+                activeOpacity={1}
+                style={{width:'80%',height:SCALE(232),borderRadius:10,justifyContent:'center',alignItems:'center',backgroundColor:'white'}}
+                onPress={()=>{}}>
+                <View
+                    style={{width:'80%',height:SCALE(232),borderRadius:10,justifyContent:'space-around',alignItems:'center',backgroundColor:'white'}}>
+                    <View>
+                        <Text style={{fontSize:FONT(0.53 * 75 / 2),color:'#b7b9c5'}}>{this.state.msg}</Text>
+                    </View>
+                    <TouchableOpacity onPress={this.confirm}>
+                        <View
+                            style={{width:SCALE(120),height:SCALE(50),borderRadius:10,backgroundColor:'#0094ff',justifyContent:'center',
+                                alignItems:'center'}}>
+                            <Text style={{fontSize:FONT(0.53 * 75 / 2),color:'white'}}>确定</Text></View>
+                    </TouchableOpacity>
+                </View>
+            </TouchableOpacity>)
+    };
 
     /**
      *显示弹出框
      * */
-    // renderModal(contentView, visible, customerlayout,animation){
-    //     return <ModalUtil
-    //         visible={visible}
-    //         close={this.close}
-    //         contentView={contentView}
-    //         animation={animation}
-    //         customerlayout={customerlayout}
-    //     />
-    // }
+    renderModal(contentView, visible, customerlayout,animation){
+        return <ModalUtil
+            visible={visible}
+            close={this.close}
+            contentView={contentView?contentView:this.contentView}
+            animation={animation}
+            customerlayout={customerlayout}
+        />
+    }
 
     renderStatusBar(params){
         return (<StatusBar backgroundColor={'red'} barStyle={'default'}/>)
