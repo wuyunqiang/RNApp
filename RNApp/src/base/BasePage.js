@@ -66,21 +66,6 @@ export default class Base extends Component<Props> {
             },(err)=>{
                 console.log('缓存文件读取token 错误',err)
             });
-
-            READ_CACHE('userinfo',(res)=>{
-                res? CacheData.userinfo = res:null;
-                console.log('CacheData.userinfo',CacheData.userinfo)
-
-            },(err)=>{
-                console.log('缓存文件读取userinfo 错误',err)
-            })
-            READ_CACHE('securityLevel',(res)=>{
-                res? CacheData.securityLevel = res:null;
-                console.log('CacheData.securityLevel',CacheData.securityLevel)
-
-            },(err)=>{
-                console.log('缓存文件读取securityLevel 错误',err)
-            })
         })
     }
 
@@ -312,43 +297,6 @@ export default class Base extends Component<Props> {
             })
         }
     }
-
-    //生成图形验证码图片
-     async GenerateCodeImage(phoneNo,type){
-        let params = {
-            phoneNo:phoneNo,
-            type:type,
-        };
-        let res = await HttpUtil.POST(URL.generateCode,params);
-        if(res.status){//请求失败
-            Base.ShowToast(res.info);
-        }else{
-            if(Platform.OS=='android'){
-                let data = await NativeModules.NativeUtil.VerifyImage(res.generateCode);//获取base64格式的图片
-                console.log('data',data);
-                this.setState({
-                    verifyImage:'data:image/png;base64,'+data.base64,
-                    generateCode:res.generateCode,
-                })
-            }else{
-                let NativeUtil  = NativeModules.NativeUtil;
-                NativeUtil.getBase64Image(res.generateCode).then((code)=>{
-                    this.setState({
-                        verifyImage:code,
-                        generateCode:res.generateCode,
-                    })
-                }).catch((error)=>{
-                    this.setState({
-                        generateCode:res.generateCode,
-                    })
-                })
-            }
-
-        }
-    };
-
-
-
     //各种事件函数处理结束********************************************************************************************
 
 
