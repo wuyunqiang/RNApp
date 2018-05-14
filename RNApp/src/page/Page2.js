@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{Component}from 'react';
 import {
     StyleSheet,
     Image,
@@ -19,7 +19,9 @@ import {
     InteractionManager,
     TouchableHighlight,
 } from 'react-native';
+import {PullList} from '../component/pull'
 import BaseComponent from '../base/BasePage'
+const headerHeight = SCALE(200);
 export default class Register extends BaseComponent {
     static navigationOptions = {
         header:({navigation}) =>{
@@ -42,32 +44,98 @@ export default class Register extends BaseComponent {
     goToPage = ()=>{
         this.props.navigation.navigate('Page3');
     }
-    renderPage(){
-        return (
-            <View style={styles.container}>
-                <TouchableOpacity style={{
-                    width:WIDTH-SCALE(40)-SCALE(40),
-                    alignItems: 'center',
-                    justifyContent:'center',
-                    marginLeft:SCALE(40),
-                    marginRight:SCALE(40),
-                    marginTop:SCALE(100),}} activeOpacity={0.7} onPress={this.goToPage}>
-                    <View style={{
-                        width:WIDTH-SCALE(40)-SCALE(40),
-                        borderRadius:24,
-                        height:SCALE(96),
-                        justifyContent:'center',
-                        alignItems:'center',
-                        backgroundColor:'#0094ff'
-                    }}>
-                        <Text style={{fontSize:FONT(39/2),backgroundColor:'transparent',textAlign:'center'}}>这是第二页</Text>
 
-                        <Text style={{fontSize:FONT(39/2),backgroundColor:'transparent',textAlign:'center'}}>跳转到Page3</Text>
-                    </View>
-                </TouchableOpacity>
+    onPullRelease = (resolve)=>{
+        try {
+            setTimeout(()=>{
+                this.pullList&&this.pullList.setData(['1','2','3','4','5','6','7','8','9','10']);
+                resolve&&resolve();
+            },2000);
+
+        } catch (err) {
+            resolve&&resolve();
+            Log(err);
+        }
+    };
+
+    loadMore = (page)=>{
+        try {
+            setTimeout(()=>{
+                this.pullList&&this.pullList.addData(['11','12','13','14','15','16','17','18','19','20']);
+            },2000);
+        } catch (err) {
+            Log(err);
+        }
+    };
+
+
+    renderTopIndicator = (pulling, pullok, pullrelease,gesturePosition)=>{
+        if (pulling) {
+            this.txtPulling && this.txtPulling.setNativeProps({style:styles.show});
+            this.txtPullok && this.txtPullok.setNativeProps({style: styles.hide});
+            this.txtPullrelease && this.txtPullrelease.setNativeProps({style: styles.hide});
+        } else if (pullok) {
+
+            this.txtPulling && this.txtPulling.setNativeProps({style: styles.hide});
+            this.txtPullok && this.txtPullok.setNativeProps({style: styles.show});
+            this.txtPullrelease && this.txtPullrelease.setNativeProps({style: styles.hide});
+        } else if (pullrelease) {
+            this.txtPulling && this.txtPulling.setNativeProps({style: styles.hide});
+            this.txtPullok && this.txtPullok.setNativeProps({style: styles.hide});
+            this.txtPullrelease && this.txtPullrelease.setNativeProps({style: styles.show});
+        }
+        return (
+            <View ref={(c) => {this.PullAll = c;}} style={styles.header}>
+                <View ref={(c) => {this.txtPulling = c;}} style={styles.hide}>
+                    <Image style={{width:SCALE(200),height:headerHeight}} source={AppImages.Header.pulling}/>
+                </View>
+                <View ref={(c) => {this.txtPullok = c;}} style={styles.hide}>
+                    <Image style={{width:SCALE(200),height:headerHeight}} source={AppImages.Header.pulling}/>
+                </View>
+                <View ref={(c) => {this.txtPullrelease = c;}} style={styles.hide}>
+                    <Image style={{width:SCALE(62),height:SCALE(46)}} source={AppImages.Header.pullrelease}/>
+                </View>
             </View>
         )
     }
+
+
+    renderRowView = ({item, index, separators})=>{
+        return (<Item key = {''+index} data = {item} OnClick = {this.OnClick}/>)};
+
+
+    renderPage(){
+        return (
+            <PullList
+                Android_Native={true}
+                Key={'list'}
+                ref={(list) => this.pullList = list}
+                topIndicatorRender={this.renderTopIndicator}
+                topIndicatorHeight={headerHeight}
+                onEndReachedThreshold={20}
+                onPullRelease={this.onPullRelease}
+                onEndReached={this.loadMore}
+                renderItem={this.renderRowView}
+                getItemLayout={(data, index) => ({length: SCALE(390), offset: SCALE(390) * index, index})}
+                numColumns={1}
+                ItemSeparatorComponent={() => {
+                    return null;
+                }}
+                initialNumToRender={5}
+                renderLoading = {()=>{return null;}}
+            />
+        )
+    }
+}
+
+class Item extends Component{
+   render(){
+       return (<View style={{width:WIDTH,height:SCALE(390),justifyContent:'center',alignItems:'center'}}>
+           <View style={{marginTop:SCALE(20),width:WIDTH,flex:1,backgroundColor:Color.C0094ff,justifyContent:'center',alignItems:'center'}}>
+               <Text>{this.props.data}</Text>
+           </View>
+       </View>)
+   }
 }
 const styles = StyleSheet.create({
     container: {
@@ -78,7 +146,25 @@ const styles = StyleSheet.create({
         width:257,
         height:255,
         marginTop:SCALE(50)
-    }
+    },
+    header:{
+        height: headerHeight,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    hide: {
+        position: 'absolute',
+        left: 10000
+    },
+    show:{
+        position: 'relative',
+        left: 0,
+        flexDirection: 'row',
+        width: Dimensions.get('window').width,
+        height: 40,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
 });
 
 

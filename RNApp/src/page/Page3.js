@@ -44,7 +44,9 @@ export default class Register extends BaseComponent {
     }
     renderPage(){
         return (
-            <View style={styles.container}>
+            <ScrollView
+                contentContainerStyle={{alignItems: 'center',}}
+                style={{flex: 1,}}>
                 <TouchableOpacity style={{
                     width:WIDTH-SCALE(40)-SCALE(40),
                     alignItems: 'center',
@@ -65,7 +67,7 @@ export default class Register extends BaseComponent {
                         <Text style={{fontSize:FONT(39/2),backgroundColor:'transparent',textAlign:'center'}}>跳转到Page4</Text>
                     </View>
                 </TouchableOpacity>
-            </View>
+            </ScrollView>
         )
     }
 }

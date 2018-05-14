@@ -5,6 +5,8 @@ import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
 import com.rnapp.rnmodules.NativeUtil;
+import com.rnapp.rnview.PopModalManager;
+import com.rnapp.rnview.PullLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +26,9 @@ public class RNPackage implements ReactPackage {
 
     @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
-        List<ViewManager> viewManagers = new ArrayList();
-        return viewManagers;
+        List<ViewManager> views = new ArrayList<>();
+        views.add(new PullLayout());
+        views.add(new PopModalManager());
+        return views;
     }
 }

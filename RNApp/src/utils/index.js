@@ -1,4 +1,9 @@
 import {Dimensions,PixelRatio,Platform} from 'react-native';
+import '../assets'
+import './StyleColor'
+import './HttpUtil'
+import './iphoneX'
+import './CheckUtil'
 
 export const deviceWidth = Dimensions.get('window').width;      //设备的宽度
 export const deviceHeight = Dimensions.get('window').height;    //设备的高度
@@ -21,15 +26,27 @@ const scale = Math.min(deviceHeight / h2, deviceWidth / w2);   //获取缩放比
  */
 export function setSpText(size: number) {
      // size = size/pixelRatio;
-   // size = Math.round((size * scale + 0.5) * pixelRatio / fontScale);
+   size = Math.round((size * scale)/ fontScale);
     return size;
 }
+
 
 //noinspection JSAnnotator
 export function scaleSize(size: number) {
 
     size = Math.round(size * scale + 0.5);
     return size / defaultPixel;
+}
+
+export function Log(...params){
+    if(__DEV__){
+        // debug模式
+         console.log(...params)
+    }else{
+        // release模式
+        // Log('release模式');
+    }
+
 }
 
 global.FONT = setSpText;
@@ -39,6 +56,8 @@ global.SCALE = scaleSize;
 global.WIDTH = deviceWidth;
 
 global.HEIGHT = deviceHeight;
+
+global.Log = Log
 
 
 

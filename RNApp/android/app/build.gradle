@@ -94,13 +94,13 @@ def enableSeparateBuildPerCPUArchitecture = false
 def enableProguardInReleaseBuilds = false
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 26
+    buildToolsVersion "26.0.2"
 
     defaultConfig {
         applicationId "com.rnapp"
         minSdkVersion 20
-        targetSdkVersion 25
+        targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         ndk {
@@ -136,9 +136,28 @@ android {
     }
 }
 
+
+repositories {
+    // ...
+    maven { url "https://jitpack.io" }
+    maven {
+        url 'https://maven.google.com/'
+        name 'Google'
+        mavenCentral()
+        google()
+    }
+}
+
 dependencies {
+    compile 'com.facebook.fresco:fresco:1.5.0'
+    compile 'com.facebook.fresco:animated-gif:1.5.0'
+    implementation 'com.github.bumptech.glide:glide:4.7.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
+    compile project(':react-native-fetch-blob')
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:25.0.0'
+    compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.4-7'
+
+    compile 'com.android.support:appcompat-v7:26.0.0'
     compile 'com.facebook.react:react-native:+'
     // From node_modules
 }

@@ -21,6 +21,7 @@ import {
 } from 'react-native';
 let n = 10;
 var a = 20;
+import {PullScroll} from '../component/pull'
 import BaseComponent from '../base/BasePage'
 export default class Page1 extends BaseComponent {
     static navigationOptions = {
@@ -113,9 +114,27 @@ export default class Page1 extends BaseComponent {
     goToPage = ()=>{
         this.props.navigation.navigate('Page2');
     }
+
+    onPullRelease = async(resolve)=>{
+        try {
+            setTimeout(()=>{
+                resolve&&resolve();
+            },4000)
+
+        } catch (err) {
+            resolve&&resolve();
+            Log(err);
+        }
+    };
+
     renderPage(){
         return (
-            <View style={styles.container}>
+            <PullScroll
+                Key={'PullScroll'}
+                Android_Native={true}
+                onPullRelease={this.onPullRelease}
+                contentContainerStyle={{alignItems: 'center',}}
+                style={{flex: 1,}}>
                 <TouchableOpacity style={styles.touchstyle} activeOpacity={0.7} onPress={this.goToPage}>
                     <View style={styles.viewstyle}>
                         <Text style={{fontSize:FONT(39/2),backgroundColor:'transparent',textAlign:'center'}}>这是第一页</Text>
@@ -141,7 +160,7 @@ export default class Page1 extends BaseComponent {
                     </View>
                 </TouchableOpacity>
                 <Image style={{width:100,height:50}} source={{uri:this.state.url}}/>
-            </View>
+            </PullScroll>
         )
     }
 }
@@ -152,7 +171,6 @@ function f3() {
 const styles = StyleSheet.create({
         container: {
             flex: 1,
-            alignItems: 'center',
         },
         image: {
             width: 257,

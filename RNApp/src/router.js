@@ -17,7 +17,7 @@ import {
     Image,
 } from 'react-native';
 import { StackNavigator,TabNavigator,NavigationActions } from 'react-navigation';
-import CardStackStyleInterpolator from 'react-navigation/src/views/CardStack/CardStackStyleInterpolator';
+import CardStackStyleInterpolator from 'react-navigation/src/views/StackView/StackViewStyleInterpolator';
 import Page1 from './page/Page1'
 import Page2 from './page/Page2'
 import Page3 from './page/Page3'

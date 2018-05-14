@@ -25,10 +25,9 @@ import {
 import { NavigationActions } from 'react-navigation'
 import ModalUtil from '../utils/ModalUtil'
 import Toast from "react-native-root-toast";
-import SplashScreen from "react-native-splash-screen";
-import CodePush from 'react-native-code-push';
-import URL from "../utils/Constant";
-import Status from "../data/status";
+import Status from '../utils/Status'
+// import SplashScreen from "react-native-splash-screen";
+// import CodePush from 'react-native-code-push';
 type Props = {};
 
 export default class Base extends Component<Props> {
@@ -47,7 +46,6 @@ export default class Base extends Component<Props> {
         this.BaseState = {
             flag:true,
             isNet:true,
-            url: "http://m.nnshandai.com",
             visible:false,
             loading:false,
             customerlayout:{justifyContent:'center',alignItems:'center'}
@@ -58,13 +56,13 @@ export default class Base extends Component<Props> {
 
     componentDidMount() {
         this.isLogin = DeviceEventEmitter.addListener('isLogin',(data)=>{
-            console.log('DeviceEventEmitter data',data);
+            Log('DeviceEventEmitter data',data);
             this.loginCallBack(data)
         });
         if(Platform.OS==='android'){
             BackHandler.addEventListener('hardwareBackPress', this.onBackAndroid);
         }
-        SplashScreen.hide();
+        // SplashScreen.hide();
         // this.readFile()
     }
 
@@ -73,33 +71,10 @@ export default class Base extends Component<Props> {
     clearData(){
         CLEAR_All();
         HttpUtil.token = null;
-        CacheData.userinfo = null;
-        CacheData.securityLevel = null;
     }
 
     readFile(){
         InteractionManager.runAfterInteractions(()=>{
-            READ_CACHE('token',(res)=>{
-                res?HttpUtil.token = res:null;
-                console.log('HttpUtil.token',HttpUtil.token)
-            },(err)=>{
-                console.log('缓存文件读取token 错误',err)
-            });
-
-            READ_CACHE('userinfo',(res)=>{
-                res? CacheData.userinfo = res:null;
-                console.log('CacheData.userinfo',CacheData.userinfo)
-
-            },(err)=>{
-                console.log('缓存文件读取userinfo 错误',err)
-            })
-            READ_CACHE('securityLevel',(res)=>{
-                res? CacheData.securityLevel = res:null;
-                console.log('CacheData.securityLevel',CacheData.securityLevel)
-
-            },(err)=>{
-                console.log('缓存文件读取securityLevel 错误',err)
-            })
         })
     }
 
@@ -135,7 +110,7 @@ export default class Base extends Component<Props> {
                     this.props.navigation.goBack(null);
                     return;
                 }
-                console.log('执行了这里 返回'+PageName+":",routers[i].key);
+                Log('执行了这里 返回'+PageName+":",routers[i].key);
                 this.props.navigation.goBack(routers[i+1].key);
                 return;
             }
@@ -147,7 +122,7 @@ export default class Base extends Component<Props> {
      * 验证token失效
      * **/
     navigate(page,params){
-        let NoTokenPage = ['BidDetail','Web'];
+        let NoTokenPage = ['Home','BidPage','MinePage','BidDetail','Web'];
         for(let i=0;i<NoTokenPage.length;i++){
             if(page==NoTokenPage[i]){
                 this.props.navigation.navigate(page,params);
@@ -165,34 +140,34 @@ export default class Base extends Component<Props> {
     /***
      * 可以重定向到tab的某个页面
      * ***/
-     reset(page,params={}){
-         let tab = ['Home','BidPage','MinePage'];
-         let routeName = page;
-         for(let i=0;i<tab.length;i++){
-             if(page==tab[i]){
-                 routeName = 'Index';
-                 break;
-             }
-         }
-         let resetAction = NavigationActions.reset({
-             index: 0,
-             actions: [
-                 NavigationActions.navigate(
-                     {
-                         index: 0,
-                         routeName: routeName,
-                         action: NavigationActions.navigate({routeName:page,params:params})
-                     }
-                    )
-             ]
-         });
-         this.props.navigation.dispatch(resetAction)
-     }
+    reset(page,params={}){
+        let tab = [];
+        let routeName = page;
+        for(let i=0;i<tab.length;i++){
+            if(page==tab[i]){
+                routeName = 'Index';
+                break;
+            }
+        }
+        let resetAction = NavigationActions.reset({
+            index: 0,
+            actions: [
+                NavigationActions.navigate(
+                    {
+                        index: 0,
+                        routeName: routeName,
+                        action: NavigationActions.navigate({routeName:page,params:params})
+                    }
+                )
+            ]
+        });
+        this.props.navigation.dispatch(resetAction)
+    }
 
 
     //全局可覆盖
     loginCallBack(res){
-        console.log('callback res',res)
+        Log('callback res',res)
     };
 
     /***
@@ -209,11 +184,11 @@ export default class Base extends Component<Props> {
         }
 
         let res = await HttpUtil.POST(url,params,headers);
-        console.log('网络请求获取数据BasePage HttpPost',res);
+        Log('网络请求获取数据BasePage HttpPost',res);
         if(!res||res.status&&res.status!=Status.SUCC){//失败显示错误信息
             if(!res){//网络请求失败
                 if(!NoloadingAfter){
-                    console.log('NoloadingAfter 执行这里 loading 消失');
+                    Log('NoloadingAfter 执行这里 loading 消失');
                     this.setState({
                         visible:false,
                         loading:false,
@@ -228,7 +203,7 @@ export default class Base extends Component<Props> {
                     loading:false,
                     customerlayout:{justifyContent:'center',alignItems:'center'},
                 });
-                this.clearData();
+                this.props.navigation.navigate('Login');
                 return false;
             }
             this.setState({
@@ -240,7 +215,7 @@ export default class Base extends Component<Props> {
             return false;
         }
         if(!NoloadingAfter){
-            console.log('NoloadingAfter 执行这里 loading 消失');
+            Log('NoloadingAfter 执行这里 loading 消失');
             this.setState({
                 visible:false,
                 loading:false,
@@ -262,7 +237,7 @@ export default class Base extends Component<Props> {
             })
             return true;
         }
-        console.log("testhahahahahahahhaf");
+        Log("testhahahahahahahhaf");
         return false;
     };
 
@@ -285,11 +260,11 @@ export default class Base extends Component<Props> {
             // },
             installMode: CodePush.InstallMode.IMMEDIATE
         },(status)=>{//先返回现在的版本再返回将要更新的版本
-            console.log("CodePush status",status);
+            Log("CodePush status",status);
         },(progress)=>{
-            console.log("CodePush progress",progress)
+            Log("CodePush progress",progress)
         },(update)=>{
-            console.log("CodePush update",update)
+            Log("CodePush update",update)
         });
     }
 
@@ -298,18 +273,18 @@ export default class Base extends Component<Props> {
      * */
     HandleConnectivityChange = (status) =>{
         let type =""+status.type;
-        console.log('status change:' , type);
+        Log('status change:' , type);
         if (type.toLowerCase() == 'none'||type.toLowerCase() == 'unknown'){
             if(this.state.isNet){
-                console.log('handleConnectivityChange 执行了这里没有网络hahahhahaha');
+                Log('handleConnectivityChange 执行了这里没有网络hahahhahaha');
                 this.setState({
                     isNet:false,
                 })
             }
         }else{
-            console.log('HandleConnectivityChange this.state',this.state)
+            Log('HandleConnectivityChange this.state',this.state)
             if(!this.state.isNet){
-                console.log('handleConnectivityChange 执行了这里有网络');
+                Log('handleConnectivityChange 执行了这里有网络');
                 this.setState({
                     isNet:true,
                 })
@@ -318,12 +293,12 @@ export default class Base extends Component<Props> {
     }
 
     /**
-    *做一些延迟事情 优化函数
-    * */
+     *做一些延迟事情 优化函数
+     * */
     DoSomething(todo){
         InteractionManager.runAfterInteractions(()=>{
             if(typeof(todo) =='function'){
-                console.log("执行了这里延迟执行函数");
+                Log("执行了这里延迟执行函数");
                 todo&&todo()
             }
         });
@@ -334,7 +309,7 @@ export default class Base extends Component<Props> {
         this.setState({
             h:"hahah"
         },()=>{
-            console.log('this.state',this.state)
+            Log('this.state',this.state)
         })
     }
 
@@ -362,19 +337,19 @@ export default class Base extends Component<Props> {
      * */
     IsConnNet = async()=>{
         let isNet = await fetch("https://www.baidu.com");
-        console.log('判断是否有网络isNet',isNet);
+        Log('判断是否有网络isNet',isNet);
         if(isNet.status=200){
             if(!this.state.isNet){
-                console.log('执行了这里有网络');
+                Log('执行了这里有网络');
                 this.setState({
                     isNet:true,
                 });
             }
-            console.log('有网络',isNet);
+            Log('有网络',isNet);
             return true;
         }else{
             if(this.state.isNet){
-                console.log('执行了这里没有网络hahahhahaha');
+                Log('执行了这里没有网络hahahhahaha');
                 this.setState({
                     isNet:false,
                 });
@@ -401,7 +376,7 @@ export default class Base extends Component<Props> {
     }
 
     //生成图形验证码图片
-     async GenerateCodeImage(phoneNo,type){
+    async GenerateCodeImage(phoneNo,type){
         let params = {
             phoneNo:phoneNo,
             type:type,
@@ -412,7 +387,7 @@ export default class Base extends Component<Props> {
         }else{
             if(Platform.OS=='android'){
                 let data = await NativeModules.NativeUtil.VerifyImage(res.generateCode);//获取base64格式的图片
-                console.log('data',data);
+                Log('data',data);
                 this.setState({
                     verifyImage:'data:image/png;base64,'+data.base64,
                     generateCode:res.generateCode,
