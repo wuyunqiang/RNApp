@@ -17,6 +17,7 @@ import {
     ActivityIndicator,
     BackHandler,
     NetInfo,
+    DeviceEventEmitter,
     StatusBar,
     InteractionManager,
     NativeModules
@@ -27,14 +28,16 @@ import Toast from "react-native-root-toast";
 import SplashScreen from "react-native-splash-screen";
 import CodePush from 'react-native-code-push';
 import URL from "../utils/Constant";
+import Status from "../data/status";
 type Props = {};
+
 export default class Base extends Component<Props> {
 
     render(){
-        return <View style={{width:'100%',height:'100%'}}>
+        return <View style={{flex:1,backgroundColor:'white'}}>
             {this.renderNonNetWork()}
+            {this.renderModal(this.state.loading?this.renderLoading:this.contentView,this.state.visible,this.state.customerlayout,'fade')}
             {this.renderPage&&this.renderPage()}
-            {this.renderModal(this.contentView,this.state.visible,{justifyContent:'center',alignItems:'center'},'fade')}
         </View>
     }
 
@@ -46,16 +49,32 @@ export default class Base extends Component<Props> {
             isNet:true,
             url: "http://m.nnshandai.com",
             visible:false,
+            loading:false,
+            customerlayout:{justifyContent:'center',alignItems:'center'}
         };
         NetInfo.addEventListener('connectionChange', this.HandleConnectivityChange);
+
     }
 
     componentDidMount() {
+        this.isLogin = DeviceEventEmitter.addListener('isLogin',(data)=>{
+            console.log('DeviceEventEmitter data',data);
+            this.loginCallBack(data)
+        });
         if(Platform.OS==='android'){
-            // BackHandler.addEventListener('hardwareBackPress', this.onBackAndroid);
+            BackHandler.addEventListener('hardwareBackPress', this.onBackAndroid);
         }
         SplashScreen.hide();
-        this.readFile()
+        // this.readFile()
+    }
+
+
+    //清除缓存
+    clearData(){
+        CLEAR_All();
+        HttpUtil.token = null;
+        CacheData.userinfo = null;
+        CacheData.securityLevel = null;
     }
 
     readFile(){
@@ -66,6 +85,21 @@ export default class Base extends Component<Props> {
             },(err)=>{
                 console.log('缓存文件读取token 错误',err)
             });
+
+            READ_CACHE('userinfo',(res)=>{
+                res? CacheData.userinfo = res:null;
+                console.log('CacheData.userinfo',CacheData.userinfo)
+
+            },(err)=>{
+                console.log('缓存文件读取userinfo 错误',err)
+            })
+            READ_CACHE('securityLevel',(res)=>{
+                res? CacheData.securityLevel = res:null;
+                console.log('CacheData.securityLevel',CacheData.securityLevel)
+
+            },(err)=>{
+                console.log('缓存文件读取securityLevel 错误',err)
+            })
         })
     }
 
@@ -77,8 +111,9 @@ export default class Base extends Component<Props> {
 
     componentWillUnmount() {
         NetInfo.removeEventListener('connectionChange');
+        this.isLogin&&this.isLogin.remove()
         if(Platform.OS==='android'){
-            BackHandler.removeEventListener('hardwareBackPress', this.OnBackAndroid);
+            BackHandler.removeEventListener('hardwareBackPress', this.onBackAndroid);
         }
     }
     //声明周期回调结束********************************************************************************************
@@ -112,8 +147,17 @@ export default class Base extends Component<Props> {
      * 验证token失效
      * **/
     navigate(page,params){
+        let NoTokenPage = ['BidDetail','Web'];
+        for(let i=0;i<NoTokenPage.length;i++){
+            if(page==NoTokenPage[i]){
+                this.props.navigation.navigate(page,params);
+                return;
+            }
+        }
         if(!HttpUtil.token){
             //没有登录显示登录页面
+            this.props.navigation.navigate('Login',params);
+            return;
         }
         this.props.navigation.navigate(page,params);
     }
@@ -121,35 +165,87 @@ export default class Base extends Component<Props> {
     /***
      * 可以重定向到tab的某个页面
      * ***/
-    reset(page,params={}){
-        let resetAction = NavigationActions.reset({
-            index: 0,
-            actions: [
-                NavigationActions.navigate(
-                    {
-                        index: 0,
-                        routeName: 'Index',
-                        action: NavigationActions.navigate({routeName:page,params:params})
-                    }
-                   )
-            ]
-        });
-        this.props.navigation.dispatch(resetAction)
-    }
+     reset(page,params={}){
+         let tab = ['Home','BidPage','MinePage'];
+         let routeName = page;
+         for(let i=0;i<tab.length;i++){
+             if(page==tab[i]){
+                 routeName = 'Index';
+                 break;
+             }
+         }
+         let resetAction = NavigationActions.reset({
+             index: 0,
+             actions: [
+                 NavigationActions.navigate(
+                     {
+                         index: 0,
+                         routeName: routeName,
+                         action: NavigationActions.navigate({routeName:page,params:params})
+                     }
+                    )
+             ]
+         });
+         this.props.navigation.dispatch(resetAction)
+     }
 
+
+    //全局可覆盖
+    loginCallBack(res){
+        console.log('callback res',res)
+    };
 
     /***
      * 请求失败默认弹出弹框
      * 显示失败信息
      * ***/
-    async HttpPost(url,params,headers){
-        let res = await HttpUtil.POST(url,params,headers);
-        if(res.status&&res.status!="20000000"){//失败显示错误信息
+    async HttpPost(url,params,headers,NoloadingAfter,NoloadingBefore){
+        if(!NoloadingBefore){
             this.setState({
+                customerlayout:{justifyContent:'center',alignItems:'center',backgroundColor:'transparent'},
+                visible:true,
+                loading:true,
+            });
+        }
+
+        let res = await HttpUtil.POST(url,params,headers);
+        console.log('网络请求获取数据BasePage HttpPost',res);
+        if(!res||res.status&&res.status!=Status.SUCC){//失败显示错误信息
+            if(!res){//网络请求失败
+                if(!NoloadingAfter){
+                    console.log('NoloadingAfter 执行这里 loading 消失');
+                    this.setState({
+                        visible:false,
+                        loading:false,
+                        customerlayout:{justifyContent:'center',alignItems:'center'},
+                    });
+                }
+                return;
+            }
+            if(res.status==Status.ERROR_login_no){//token失效 跳到登录页面 然后重新登录
+                this.setState({
+                    visible:false,
+                    loading:false,
+                    customerlayout:{justifyContent:'center',alignItems:'center'},
+                });
+                this.clearData();
+                return false;
+            }
+            this.setState({
+                loading:false,
                 visible:true,
                 msg:res.message,
+                customerlayout:{justifyContent:'center',alignItems:'center'},
             });
             return false;
+        }
+        if(!NoloadingAfter){
+            console.log('NoloadingAfter 执行这里 loading 消失');
+            this.setState({
+                visible:false,
+                loading:false,
+                customerlayout:{justifyContent:'center',alignItems:'center'},
+            });
         }
         //成功没有res 里面没有status(一般情况下)
         return res;
@@ -159,7 +255,13 @@ export default class Base extends Component<Props> {
      * 安卓返回键监听
      *
      * ***/
-    OnBackAndroid = (params) => {
+    onBackAndroid = (params) => {
+        if(this.state.visible){
+            this.setState({
+                visible:false,
+            })
+            return true;
+        }
         console.log("testhahahahahahahhaf");
         return false;
     };
@@ -283,7 +385,7 @@ export default class Base extends Component<Props> {
 
 
     //显示对话框
-    showDialog = (msg)=>{
+    showDialog =(msg) =>{
         if(typeof msg ==='string'){
             this.setState({
                 visible:true,
@@ -297,6 +399,43 @@ export default class Base extends Component<Props> {
             })
         }
     }
+
+    //生成图形验证码图片
+     async GenerateCodeImage(phoneNo,type){
+        let params = {
+            phoneNo:phoneNo,
+            type:type,
+        };
+        let res = await HttpUtil.POST(URL.generateCode,params);
+        if(res.status){//请求失败
+            Base.ShowToast(res.info);
+        }else{
+            if(Platform.OS=='android'){
+                let data = await NativeModules.NativeUtil.VerifyImage(res.generateCode);//获取base64格式的图片
+                console.log('data',data);
+                this.setState({
+                    verifyImage:'data:image/png;base64,'+data.base64,
+                    generateCode:res.generateCode,
+                })
+            }else{
+                let NativeUtil  = NativeModules.NativeUtil;
+                NativeUtil.getBase64Image(res.generateCode).then((code)=>{
+                    this.setState({
+                        verifyImage:code,
+                        generateCode:res.generateCode,
+                    })
+                }).catch((error)=>{
+                    this.setState({
+                        generateCode:res.generateCode,
+                    })
+                })
+            }
+
+        }
+    };
+
+
+
     //各种事件函数处理结束********************************************************************************************
 
 
@@ -307,8 +446,8 @@ export default class Base extends Component<Props> {
     * */
     static ShowToast(msg){
         Toast.show(msg, {
-            duration: Toast.durations.LONG,
-            position: Toast.positions.BOTTOM,
+            duration: Toast.durations.SHORT,
+            position: Toast.positions.CENTER,
             shadow: true,
             animation: true,
             hideOnPress: false,
@@ -322,7 +461,7 @@ export default class Base extends Component<Props> {
     renderLoading(){
         return (<View style={{width:"100%",height:"100%",justifyContent:'center', alignItems:'center'}}>
             <ActivityIndicator animating size="large" color={'#FF6347'}/>
-            <Text note >{"努力加载中..."}</Text>
+            <Text style={{color:Color.fontColor,fontSize:FONT(18)}} note >{"努力加载中..."}</Text>
         </View>)
     }
 
@@ -361,7 +500,7 @@ export default class Base extends Component<Props> {
                 <View
                     style={{width:'80%',height:SCALE(232),borderRadius:10,justifyContent:'space-around',alignItems:'center',backgroundColor:'white'}}>
                     <View>
-                        <Text style={{fontSize:FONT(0.53 * 75 / 2),color:'#b7b9c5'}}>{this.state.msg}</Text>
+                        <Text style={{fontSize:FONT(0.53 * 75 / 2),color:Color.fontColor}}>{this.state.msg}</Text>
                     </View>
                     <TouchableOpacity onPress={this.confirm}>
                         <View
