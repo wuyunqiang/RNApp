@@ -122,18 +122,13 @@ export default class Base extends Component<Props> {
      * 验证token失效
      * **/
     navigate(page,params){
-        let NoTokenPage = ['Home','BidPage','MinePage','BidDetail','Web'];
-        for(let i=0;i<NoTokenPage.length;i++){
-            if(page==NoTokenPage[i]){
-                this.props.navigation.navigate(page,params);
-                return;
-            }
-        }
-        if(!HttpUtil.token){
-            //没有登录显示登录页面
-            this.props.navigation.navigate('Login',params);
-            return;
-        }
+        // let NoTokenPage = [];
+        // for(let i=0;i<NoTokenPage.length;i++){
+        //     if(page==NoTokenPage[i]){
+        //         this.props.navigation.navigate(page,params);
+        //         return;
+        //     }
+        // }
         this.props.navigation.navigate(page,params);
     }
 

@@ -23,9 +23,13 @@ let n = 10;
 var a = 20;
 import {PullScroll} from '../component/pull'
 import BaseComponent from '../base/BasePage'
+import Register from "./Page4";
 export default class Page1 extends BaseComponent {
+    static Navigation_routers;
     static navigationOptions = {
         header:({navigation}) =>{
+            let {state:{routes}} = navigation;
+            Page1.Navigation_routers = routes;
             return null;
         }
     };
@@ -39,6 +43,13 @@ export default class Page1 extends BaseComponent {
     componentDidMount(){
         super.componentDidMount();
         this.props.navigation.setParams({login:this.goToLogin})
+        const didBlurSubscription = this.props.navigation.addListener(
+            'didFocus',
+            payload => {
+                console.debug('didBlur', payload);
+                console.log('Page1.Navigation_routers',  Page1.Navigation_routers)
+            }
+        );
     }
 
     componentWillUnMount() {
@@ -46,14 +57,14 @@ export default class Page1 extends BaseComponent {
         this.timer&&clearTimeout(this.timer);
     }
 
-    getBase64= async()=>{
-        console.log("this.timer",this.timer);
-       let data = await NativeModules.NativeUtil.VerifyImage("1as4")
-       console.log("data",data);
-        this.setState({
-            url:"data:image/png;base64,"+data.base64
-        })
-    };
+    // getBase64= async()=>{
+    //     console.log("this.timer",this.timer);
+    //    let data = await NativeModules.NativeUtil.VerifyImage("1as4")
+    //    console.log("data",data);
+    //     this.setState({
+    //         url:"data:image/png;base64,"+data.base64
+    //     })
+    // };
 
     test=()=>{
         console.log('a',a);
@@ -112,7 +123,7 @@ export default class Page1 extends BaseComponent {
 
 
     goToPage = ()=>{
-        this.props.navigation.navigate('Page2');
+        this.props.navigation.navigate('Page3');
     }
 
     onPullRelease = async(resolve)=>{
@@ -142,7 +153,7 @@ export default class Page1 extends BaseComponent {
                     </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.touchstyle} activeOpacity={0.7} onPress={this.getBase64}>
+                <TouchableOpacity style={styles.touchstyle} activeOpacity={0.7}>
                     <View style={styles.viewstyle}>
                         <Text style={{fontSize:FONT(39/2),backgroundColor:'transparent',textAlign:'center'}}>获取base64</Text>
                     </View>
@@ -159,7 +170,14 @@ export default class Page1 extends BaseComponent {
                         <Text style={{fontSize:FONT(39/2),backgroundColor:'transparent',textAlign:'center'}}>test2 this指向touch组件</Text>
                     </View>
                 </TouchableOpacity>
-                <Image style={{width:100,height:50}} source={{uri:this.state.url}}/>
+
+                <View style={{marginTop:SCALE(20),width:WIDTH,height:SCALE(300),backgroundColor:Color.C777777}}/>
+                <View style={{marginTop:SCALE(20),width:WIDTH,height:SCALE(300),backgroundColor:Color.C777777}}/>
+                <View style={{marginTop:SCALE(20),width:WIDTH,height:SCALE(300),backgroundColor:Color.C777777}}/>
+                <View style={{marginTop:SCALE(20),width:WIDTH,height:SCALE(300),backgroundColor:Color.C777777}}/>
+
+                <View style={{marginTop:SCALE(20),width:WIDTH,height:SCALE(300),backgroundColor:Color.C777777}}/>
+
             </PullScroll>
         )
     }

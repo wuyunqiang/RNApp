@@ -41,9 +41,7 @@ export default class Register extends BaseComponent {
     }
 
 
-    goToPage = ()=>{
-        this.props.navigation.navigate('Page3');
-    }
+
 
     onPullRelease = (resolve)=>{
         try {

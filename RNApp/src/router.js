@@ -71,6 +71,10 @@ const StackOptions = ({navigation}) => {
     return {headerLeft,headerRight,headerStyle,gesturesEnabled,headerTitleStyle,headerTintColor,}
 };
 
+
+
+
+
 const AppNavigator = StackNavigator(
     {
         ...Routes,
@@ -83,5 +87,35 @@ const AppNavigator = StackNavigator(
        // navigationOptions: ({navigation}) => StackOptions({navigation}),
     }
 );
+
+
+const defaultStateAction = AppNavigator.router.getStateForAction;
+
+AppNavigator.router.getStateForAction = (action, state) => {
+    if (state && action.key && action.type === 'Navigation/BACK') {
+        const desiredRoute = state.routes.find((route) => route.routeName === action.key)
+        if (desiredRoute) {
+            const index = state.routes.indexOf(desiredRoute);
+            const finalState = {
+                ...state,
+                routes: state.routes.slice(0, index + 1),
+                index: index,
+            };
+            return finalState
+        } else {
+            if (state.routes.length > action.key) {
+                const stacksLength = state.routes.length - action.key
+                const stacks = state.routes.slice(0, stacksLength)
+                const finalState = {
+                    ...state,
+                    routes: stacks,
+                    index: stacksLength - 1,
+                };
+                return finalState
+            }
+        }
+    }
+    return defaultStateAction(action, state)
+}
 
 export default AppNavigator;

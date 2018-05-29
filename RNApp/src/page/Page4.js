@@ -20,12 +20,12 @@ import {
     TouchableHighlight,
 } from 'react-native';
 import BaseComponent from '../base/BasePage'
-export default class Register extends BaseComponent {
+export default class Page4 extends BaseComponent {
     static Navigation_routers;
     static navigationOptions = {
         header:({navigation}) =>{
             let {state:{routes}} = navigation;
-            Navigation_routers = routes;
+            Page4.Navigation_routers = routes;
             return null;
         }
     };
@@ -42,6 +42,14 @@ export default class Register extends BaseComponent {
     }
 
 
+    goback = ()=>{
+        this.props.navigation.popToTop();
+        // this.props.navigation.navigate('Page1');//可以代替goback返回到指定页面
+        console.log('Page4 this.props.navigation',this.props.navigation)
+        // super.goBackPage("Page1",Page4.Navigation_routers)
+    }
+
+
 
     renderPage(){
         return (
@@ -54,7 +62,7 @@ export default class Register extends BaseComponent {
                     justifyContent:'center',
                     marginLeft:SCALE(40),
                     marginRight:SCALE(40),
-                    marginTop:SCALE(100),}} activeOpacity={0.7} onPress={()=>{super.goBackPage(Navigation_routers,"Page1")}}>
+                    marginTop:SCALE(100),}} activeOpacity={0.7} onPress={this.goback}>
                     <View style={{
                         width:WIDTH-SCALE(40)-SCALE(40),
                         borderRadius:24,
@@ -66,6 +74,30 @@ export default class Register extends BaseComponent {
                         <Text style={{fontSize:FONT(39/2),backgroundColor:'transparent',textAlign:'center'}}>这是第四页</Text>
 
                         <Text style={{fontSize:FONT(39/2),backgroundColor:'transparent',textAlign:'center'}}>跳回到第一页</Text>
+                    </View>
+                </TouchableOpacity>
+
+
+                <TouchableOpacity style={{
+                    width:WIDTH-SCALE(40)-SCALE(40),
+                    alignItems: 'center',
+                    justifyContent:'center',
+                    marginLeft:SCALE(40),
+                    marginRight:SCALE(40),
+                    marginTop:SCALE(100),}} activeOpacity={0.7} onPress={()=>{
+                        super.navigate("Page2")
+                    }}>
+                    <View style={{
+                        width:WIDTH-SCALE(40)-SCALE(40),
+                        borderRadius:24,
+                        height:SCALE(96),
+                        justifyContent:'center',
+                        alignItems:'center',
+                        backgroundColor:'#0094ff'
+                    }}>
+                        <Text style={{fontSize:FONT(39/2),backgroundColor:'transparent',textAlign:'center'}}>这是第四页</Text>
+
+                        <Text style={{fontSize:FONT(39/2),backgroundColor:'transparent',textAlign:'center'}}>跳转列表页</Text>
                     </View>
                 </TouchableOpacity>
             </ScrollView>
