@@ -33,6 +33,7 @@ export default class App extends Component {
     };
 
     render() {
+        console.log('PullLayout index this.props.children',this.props.children)
         return (
             <PullLayout
                 ref = {(pull)=>{this.pullLayout = pull}}

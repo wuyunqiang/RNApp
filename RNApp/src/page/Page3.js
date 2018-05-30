@@ -19,13 +19,13 @@ import {
     InteractionManager,
     TouchableHighlight,
 } from 'react-native';
-import BaseComponent from '../base/BasePage'
-export default class Register extends BaseComponent {
-    static navigationOptions = {
-        header:({navigation}) =>{
-            return null;
-        }
-    };
+import BasePage from '../base/BasePage'
+export default class Register extends BasePage {
+    // static navigationOptions = {
+    //     header:({navigation}) =>{
+    //         return null;
+    //     }
+    // };
     constructor(props){
         super(props);
         this.state = {

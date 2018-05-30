@@ -26,11 +26,37 @@ import { NavigationActions } from 'react-navigation'
 import ModalUtil from '../utils/ModalUtil'
 import Toast from "react-native-root-toast";
 import Status from '../utils/Status'
+import Header from '../component/Header'
+import Page1 from "../page/Page1";
 // import SplashScreen from "react-native-splash-screen";
 // import CodePush from 'react-native-code-push';
 type Props = {};
 
-export default class Base extends Component<Props> {
+export default class BasePage extends Component<Props> {
+    static Navigation_routers;
+    static navigationOptions = (nav)=>{
+        let state =  nav.navigation.state;
+        let {state:{routes}} = nav.navigation;
+        // BasePage.Navigation_routers = routes;
+        // console.log('BasePage.Navigation_routers',BasePage.Navigation_routers);
+        // console.log('BasePage.nav',nav);
+        // let tabBarVisible = state.params&&state.params.tabBarVisible;
+        return {
+            // tabBarLabel: '出借',
+            // tabBarIcon: ({tintColor,focused}) => (
+            //     <Image
+            //         style={{width:Platform.OS==='ios'?45/2:45/2,height:Platform.OS==='ios'?41/2:41/2}}
+            //         source={focused?AppImages.Common.bid_active:AppImages.Common.bid}/>
+            // ),
+            header:({navigation}) =>{
+                let {state:{routes}} = navigation;
+                BasePage.Navigation_routers = routes;
+                console.log('BasePage.routes',routes);
+                return <Header navigation = {navigation}/>;
+            },
+            // tabBarVisible:tabBarVisible,
+        }
+    };
 
     render(){
         return <View style={{flex:1,backgroundColor:'white'}}>
@@ -274,6 +300,8 @@ export default class Base extends Component<Props> {
                 Log('handleConnectivityChange 执行了这里没有网络hahahhahaha');
                 this.setState({
                     isNet:false,
+                },()=>{
+                    this.props.navigation.setParams({tabBarVisible:this.state.isNet});
                 })
             }
         }else{
@@ -282,6 +310,8 @@ export default class Base extends Component<Props> {
                 Log('handleConnectivityChange 执行了这里有网络');
                 this.setState({
                     isNet:true,
+                },()=>{
+                    this.props.navigation.setParams({tabBarVisible:this.state.isNet});
                 })
             }
         }

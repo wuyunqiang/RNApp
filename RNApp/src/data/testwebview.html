@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>text webview</title>
+    <script type="application/javascript">
+
+        //相互通信只能传递字符串类型
+        function clicktorn() { //发送消息到rn
+            let params = {
+                code:1,
+                url:'https://github.com/wuyunqiang',
+            };
+            window.postMessage(JSON.stringify(params));//发送消息到rn
+        }
+
+        window.document.addEventListener('message', function(e) {//接收数据
+            const message = e.data;//字符串类型
+            console.log('WebView message:',message);
+            // window.postMessage(message);
+        })
+    </script>
+    <style type="text/css">
+        body{
+            margin:0;
+            padding:0;
+            background: #ccc;
+        }
+        h1{
+            padding:45px;
+            margin:0;
+            text-align: center;
+            color:#0000ff;
+        }
+    </style>
+</head>
+<body>
+<h1>wuyunqiang</h1>
+<button onclick="clicktorn()">单击</button>
+</body>
+</html>

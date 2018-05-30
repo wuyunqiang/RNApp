@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.nnshandai.view.SmartRefreshLayout
+<com.rnapp.view.SmartRefreshLayout
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/refreshLayout"
@@ -12,4 +12,4 @@
     <!--srlAccentColor srlPrimaryColor 将会改变 Header 和 Footer 的主题颜色-->
     <!--srlEnablePreviewInEditMode 可以开启和关闭预览功能-->
 
-</com.nnshandai.view.SmartRefreshLayout>
+</com.rnapp.view.SmartRefreshLayout>

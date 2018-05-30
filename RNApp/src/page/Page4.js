@@ -19,16 +19,8 @@ import {
     InteractionManager,
     TouchableHighlight,
 } from 'react-native';
-import BaseComponent from '../base/BasePage'
-export default class Page4 extends BaseComponent {
-    static Navigation_routers;
-    static navigationOptions = {
-        header:({navigation}) =>{
-            let {state:{routes}} = navigation;
-            Page4.Navigation_routers = routes;
-            return null;
-        }
-    };
+import BasePage from '../base/BasePage'
+export default class Page4 extends BasePage {
     constructor(props){
         super(props);
         this.state = {
@@ -46,7 +38,7 @@ export default class Page4 extends BaseComponent {
         this.props.navigation.popToTop();
         // this.props.navigation.navigate('Page1');//可以代替goback返回到指定页面
         console.log('Page4 this.props.navigation',this.props.navigation)
-        // super.goBackPage("Page1",Page4.Navigation_routers)
+        // super.goBackPage("Page1",BasePage.Navigation_routers)
     }
 
 

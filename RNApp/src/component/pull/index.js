@@ -510,16 +510,17 @@ class PullScroll extends Component{
 
     render(){
         if (Platform.OS == 'android' && this.props.Android_Native) {
+            console.log('pull index this.props.children',this.props.children)
             return (<PullLayout
                 Key={this.props.Key}
                 ref={(pull) => {
                     this.pullLayout = pull
                 }}
-                style={{flex: 1, backgroundColor: 'white',}}>
-                <View style = {{flex:1}}>
+                style={{flex: 1, backgroundColor: 'white',}}
+                {...this.props}>
+                <ScrollView {...this.props}>
                     {this.props.children}
-                </View>
-
+                </ScrollView>
             </PullLayout>)
         }
         return (<PullView

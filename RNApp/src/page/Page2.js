@@ -20,14 +20,14 @@ import {
     TouchableHighlight,
 } from 'react-native';
 import {PullList} from '../component/pull'
-import BaseComponent from '../base/BasePage'
+import BasePage from '../base/BasePage'
 const headerHeight = SCALE(200);
-export default class Register extends BaseComponent {
-    static navigationOptions = {
-        header:({navigation}) =>{
-            return null;
-        }
-    };
+export default class Register extends BasePage {
+    // static navigationOptions = {
+    //     header:({navigation}) =>{
+    //         return null;
+    //     }
+    // };
     constructor(props){
         super(props);
         this.state = {

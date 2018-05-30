@@ -22,12 +22,14 @@ import Page1 from './page/Page1'
 import Page2 from './page/Page2'
 import Page3 from './page/Page3'
 import Page4 from './page/Page4'
+import Web from "./page/Web";
 
 const Routes = {
     Page1:{screen:Page1},
     Page2:{screen:Page2},
     Page3:{screen:Page3},
     Page4:{screen:Page4},
+    Web:{screen:Web},
 };
 
 //实现定义某个页面的动画效果
@@ -58,6 +60,7 @@ const StackOptions = ({navigation}) => {
         fontSize: FONT(17),
         color: 'white',
     };
+
     const headerTintColor= 'white';
     const headerLeft = (
         <TouchableOpacity activeOpacity={1} onPress={()=>{

@@ -22,17 +22,17 @@ import {
 let n = 10;
 var a = 20;
 import {PullScroll} from '../component/pull'
-import BaseComponent from '../base/BasePage'
-import Register from "./Page4";
-export default class Page1 extends BaseComponent {
-    static Navigation_routers;
-    static navigationOptions = {
-        header:({navigation}) =>{
-            let {state:{routes}} = navigation;
-            Page1.Navigation_routers = routes;
-            return null;
-        }
-    };
+import BasePage from '../base/BasePage'
+export default class Page1 extends BasePage {
+
+    // static navigationOptions = {
+    //     header:({navigation}) =>{
+    //         let {state:{routes}} = navigation;
+    //         BasePage.Navigation_routers = routes;
+    //         return <Header navigation = {navigation}/>;
+    //     }
+    // };
+
     constructor(props){
         super(props);
         this.state = {
@@ -47,7 +47,7 @@ export default class Page1 extends BaseComponent {
             'didFocus',
             payload => {
                 console.debug('didBlur', payload);
-                console.log('Page1.Navigation_routers',  Page1.Navigation_routers)
+                console.log('Page1.Navigation_routers',  BasePage.Navigation_routers)
             }
         );
     }
@@ -138,6 +138,7 @@ export default class Page1 extends BaseComponent {
         }
     };
 
+
     renderPage(){
         return (
             <PullScroll
@@ -145,7 +146,7 @@ export default class Page1 extends BaseComponent {
                 Android_Native={true}
                 onPullRelease={this.onPullRelease}
                 contentContainerStyle={{alignItems: 'center',}}
-                style={{flex: 1,}}>
+                style={{flex: 1,backgroundColor:'white'}}>
                 <TouchableOpacity style={styles.touchstyle} activeOpacity={0.7} onPress={this.goToPage}>
                     <View style={styles.viewstyle}>
                         <Text style={{fontSize:FONT(39/2),backgroundColor:'transparent',textAlign:'center'}}>这是第一页</Text>
@@ -153,11 +154,12 @@ export default class Page1 extends BaseComponent {
                     </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.touchstyle} activeOpacity={0.7}>
+                <TouchableOpacity style={styles.touchstyle} activeOpacity={0.7} onPress={()=>super.navigate('Web')}>
                     <View style={styles.viewstyle}>
-                        <Text style={{fontSize:FONT(39/2),backgroundColor:'transparent',textAlign:'center'}}>获取base64</Text>
+                        <Text style={{fontSize:FONT(39/2),backgroundColor:'transparent',textAlign:'center'}}>gotoWebview</Text>
                     </View>
                 </TouchableOpacity>
+
 
                 <TouchableOpacity style={styles.touchstyle} activeOpacity={0.7} onPress={this.test}>
                     <View style={styles.viewstyle}>
@@ -177,7 +179,6 @@ export default class Page1 extends BaseComponent {
                 <View style={{marginTop:SCALE(20),width:WIDTH,height:SCALE(300),backgroundColor:Color.C777777}}/>
 
                 <View style={{marginTop:SCALE(20),width:WIDTH,height:SCALE(300),backgroundColor:Color.C777777}}/>
-
             </PullScroll>
         )
     }
@@ -201,7 +202,7 @@ const styles = StyleSheet.create({
             justifyContent: 'center',
             marginLeft: SCALE(40),
             marginRight: SCALE(40),
-            marginTop: SCALE(100),
+            marginBottom: SCALE(100),
         },
         viewstyle: {
             width: WIDTH - SCALE(40) - SCALE(40),
