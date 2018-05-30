@@ -38,9 +38,11 @@ export default class Header extends Component {
         </TouchableOpacity>
     };
 
-    renderCenterView = ()=>{
-        if(this.props.centerTxt){
-            return ( <Text style={{fontSize: FONT(20),color:Color.fontColor}}>{this.props.centerTxt}</Text>)
+    renderCenterView = () => {
+        if (this.props.centerTxt) {
+            return (<Text
+                numberOfLines={1}
+                style={{fontSize: FONT(20), color: Color.fontColor}}>{this.props.centerTxt}</Text>)
         }
         return null;
     }
@@ -66,17 +68,16 @@ export default class Header extends Component {
         return (<View style={{
             ...header
         }}>
-            <View style={{flex:1}}>
+            <View style={{width:WIDTH/3,}}>
                 {this.props.renderLeftView?this.props.renderLeftView():this.renderLeftView()}
             </View>
 
-            <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+            <View style={{minWidth:WIDTH/3,maxWidth:WIDTH/2,justifyContent:'center',alignItems:'center',}}>
                 {this.props.renderCenterView?this.props.renderCenterView():this.renderCenterView()}
             </View>
-            <View style={{flex:1,flexDirection:'row',justifyContent:'flex-end',alignItems:'center'}}>
+            <View style={{width:WIDTH/3,flexDirection:'row',justifyContent:'flex-end',alignItems:'center',}}>
                 {this.props.renderRightView?this.props.renderRightView():this.renderRightView()}
             </View>
-
         </View>)
     }
 }

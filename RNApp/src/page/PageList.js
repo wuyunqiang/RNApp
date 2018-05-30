@@ -22,7 +22,7 @@ import {
 import {PullList} from '../component/pull'
 import BasePage from '../base/BasePage'
 const headerHeight = SCALE(200);
-export default class Register extends BasePage {
+export default class PageList extends BasePage {
     // static navigationOptions = {
     //     header:({navigation}) =>{
     //         return null;
@@ -37,7 +37,7 @@ export default class Register extends BasePage {
 
     componentDidMount(){
         super.componentDidMount();
-        this.props.navigation.setParams({login:this.goToLogin})
+        this.props.navigation.setParams({title:'PageList'})
     }
 
 

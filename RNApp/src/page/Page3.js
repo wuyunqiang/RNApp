@@ -20,7 +20,7 @@ import {
     TouchableHighlight,
 } from 'react-native';
 import BasePage from '../base/BasePage'
-export default class Register extends BasePage {
+export default class Page3 extends BasePage {
     // static navigationOptions = {
     //     header:({navigation}) =>{
     //         return null;
@@ -35,7 +35,7 @@ export default class Register extends BasePage {
 
     componentDidMount(){
         super.componentDidMount();
-        this.props.navigation.setParams({login:this.goToLogin})
+        this.props.navigation.setParams({title:'Page3'})
     }
 
 

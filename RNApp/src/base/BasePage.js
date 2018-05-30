@@ -51,8 +51,11 @@ export default class BasePage extends Component<Props> {
             header:({navigation}) =>{
                 let {state:{routes}} = navigation;
                 BasePage.Navigation_routers = routes;
+                let title = routes[routes.length-1].params&&routes[routes.length-1].params.title;
                 console.log('BasePage.routes',routes);
-                return <Header navigation = {navigation}/>;
+                return <Header
+                    navigation = {navigation}
+                    centerTxt = {title}/>;
             },
             // tabBarVisible:tabBarVisible,
         }

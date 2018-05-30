@@ -12,31 +12,18 @@ import {
 import BasePage from '../base/BasePage'
 import Header from '../component/Header'
 export default class Web extends BasePage {
-
-
     static navigationOptions = (nav)=>{
-        let state =  nav.navigation.state;
-        let {state:{routes}} = nav.navigation;
-        BasePage.Navigation_routers = routes;
-        console.log('BasePage.Navigation_routers',BasePage.Navigation_routers);
-        console.log('BasePage.nav',nav);
-        // let tabBarVisible = state.params&&state.params.tabBarVisible;
         return {
-            // tabBarLabel: '出借',
-            // tabBarIcon: ({tintColor,focused}) => (
-            //     <Image
-            //         style={{width:Platform.OS==='ios'?45/2:45/2,height:Platform.OS==='ios'?41/2:41/2}}
-            //         source={focused?AppImages.Common.bid_active:AppImages.Common.bid}/>
-            // ),
             header:({navigation}) =>{
                 let {state:{routes}} = navigation;
                 console.log('BasePage.routes',routes);
+                let goBack = routes[routes.length-1].params&&routes[routes.length-1].params.goBack;
+                let title = routes[routes.length-1].params&&routes[routes.length-1].params.title;
                 return <Header
                     navigation = {navigation}
                     renderLeftView={() => {
                         return (<View style={{flexDirection:'row',alignItems:'center',height:SCALE(0.767 *75 )}}>
                             <TouchableOpacity activeOpacity={1} onPress={() => {
-                                let goBack = routes[routes.length-1].params&&routes[routes.length-1].params.goBack;
                                 goBack&&goBack();
                             }}>
                                 <Image style={{width: SCALE(22), height: SCALE(42), marginLeft: SCALE(20),marginRight:SCALE(10)}}
@@ -50,9 +37,9 @@ export default class Web extends BasePage {
                                        source={AppImages.Common.close}/>
                             </TouchableOpacity>
                         </View>)
-                    }}/>;
+                    }}
+                    centerTxt = {title}/>;
             },
-            // tabBarVisible:tabBarVisible,
         }
     };
 
@@ -69,7 +56,7 @@ export default class Web extends BasePage {
 
     componentDidMount(){
         super.componentDidMount();
-        this.props.navigation.setParams({goBack:this.goBack});
+        this.props.navigation.setParams({goBack:this.goBack,title:'Web'});
     }
 
     //header 返回
@@ -99,8 +86,9 @@ export default class Web extends BasePage {
     }
 
 
-    onNavigationStateChange(e) {
-        this.webviewParams = e
+    onNavigationStateChange =(e)=> {
+        this.webviewParams = e;
+        this.props.navigation.setParams({goBack:this.goBack,title: e.title});
     }
 
 
@@ -118,7 +106,6 @@ export default class Web extends BasePage {
     onError = (e)=>{
         Log('WebView onError 页面加载出错 ：',e.nativeEvent)
     };
-
 
     //接收来自H5的消息
     onMessage = (e)=>{
@@ -171,11 +158,7 @@ export default class Web extends BasePage {
                     injectedJavaScript="document.addEventListener('message', function(e) {eval(e.data);});"
                     scalesPageToFit = {false}
                     javaScriptEnabled={true}//指定WebView中是否启用JavaScript
-                    onNavigationStateChange={(e) => {
-                        // Log("WebView onNavigationStateChange", e);
-                        this.props.navigation.setParams({title: e.title});
-                        this.onNavigationStateChange(e)
-                    }}
+                    onNavigationStateChange={this.onNavigationStateChange}
                     startInLoadingState={true} //强制WebView在第一次加载时先显示loading视图
                     // bounces={true}//指定滑动到边缘后是否有回弹效果。
                     // scrollEnabled={true}//是否启用滚动

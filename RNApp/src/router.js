@@ -19,14 +19,14 @@ import {
 import { StackNavigator,TabNavigator,NavigationActions } from 'react-navigation';
 import CardStackStyleInterpolator from 'react-navigation/src/views/StackView/StackViewStyleInterpolator';
 import Page1 from './page/Page1'
-import Page2 from './page/Page2'
+import PageList from './page/PageList'
 import Page3 from './page/Page3'
 import Page4 from './page/Page4'
 import Web from "./page/Web";
 
 const Routes = {
     Page1:{screen:Page1},
-    Page2:{screen:Page2},
+    PageList:{screen:PageList},
     Page3:{screen:Page3},
     Page4:{screen:Page4},
     Web:{screen:Web},
