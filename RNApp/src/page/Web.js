@@ -155,8 +155,8 @@ export default class Web extends BasePage {
                     onLoadEnd={this.onLoadEnd}//加载成功或者失败都会回调
                     onError={this.onError}
                     onMessage={this.onMessage}
-                    injectedJavaScript="document.addEventListener('message', function(e) {eval(e.data);});"
-                    scalesPageToFit = {false}
+                    // injectedJavaScript="document.addEventListener('message', function(e) {eval(e.data);});"
+                    // scalesPageToFit = {false}
                     javaScriptEnabled={true}//指定WebView中是否启用JavaScript
                     onNavigationStateChange={this.onNavigationStateChange}
                     startInLoadingState={true} //强制WebView在第一次加载时先显示loading视图
