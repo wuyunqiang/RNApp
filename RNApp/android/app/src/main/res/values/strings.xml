@@ -1,4 +1,4 @@
 <resources>
     <string name="reactNativeCodePush_androidDeploymentKey" moduleConfig="true"></string>
-    <string name="app_name">善贷</string>
+    <string name="app_name">RNApp</string>
 </resources>
