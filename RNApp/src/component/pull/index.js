@@ -163,6 +163,7 @@ class Pull extends Component {
     };
 
     resolveHandler = ()=>{
+        Log('使用广播方式传送数据')
         this.pullLayout&&this.pullLayout.finishRefresh(this.props.Key);
     }
 
@@ -498,6 +499,7 @@ class PullScroll extends Component{
     };
 
     resolveHandler = ()=>{
+        Log('使用广播方式传送数据')
         this.pullLayout&&this.pullLayout.finishRefresh(this.props.Key);
     }
 
@@ -510,7 +512,7 @@ class PullScroll extends Component{
 
     render(){
         if (Platform.OS == 'android' && this.props.Android_Native) {
-            console.log('pull index this.props.children',this.props.children)
+            console.log('pull index this.props.children',this.props)
             return (<PullLayout
                 Key={this.props.Key}
                 ref={(pull) => {

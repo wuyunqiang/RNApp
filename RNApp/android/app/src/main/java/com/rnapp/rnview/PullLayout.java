@@ -13,6 +13,7 @@ import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
+import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.rnapp.R;
 import com.rnapp.view.Header;
 import com.rnapp.view.SmartRefreshLayout;
@@ -34,6 +35,7 @@ public class PullLayout extends ViewGroupManager<SmartRefreshLayout> {
     Header header;
     static final int FinishRefresh = 1;
     String Key;
+    int method = 1;//1实例事件(之前测试debug正常使用 release下有bug) 2广播通知 需要在js代码里面监听广播信息且每个Key不能相同
     boolean CanRefresh = true;
 
     @Override
@@ -75,11 +77,14 @@ public class PullLayout extends ViewGroupManager<SmartRefreshLayout> {
             WritableMap params = Arguments.createMap();
             params.putString("from","native");
             Log.i(TAG,"开始刷新");
-            if(CanRefresh){
+            if(this.method==1){
+                this.dispatchEvent(reactContext,refreshlayout,"onRefreshReleased",params);
+            }else{
+                if(CanRefresh){
                 CanRefresh = false;
                 this.dispatchEvent(reactContext,refreshlayout,"onRefreshReleased",params);
             }
-
+            }
         }
     }
 
@@ -93,15 +98,20 @@ public class PullLayout extends ViewGroupManager<SmartRefreshLayout> {
         }else{
             Log.i(TAG, "发送消息事件 " +"refreshlayout View id : " + refreshlayout.getId());
             Log.i(TAG, "key:" + this.Key+eventName);
-//            reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(
-//                    refreshlayout.getId(),//实例的ID native和js两个视图会依据getId()而关联在一起
-//                    eventName,//事件名称
-//                    params
-//            );
-            //原生模块发送事件
+            if(this.method==1){
+                Log.i(TAG, "实例方式发送消息");
+                reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(
+                        refreshlayout.getId(),//实例的ID native和js两个视图会依据getId()而关联在一起
+                        eventName,//事件名称
+                        params
+                );
+            }else{
+                Log.i(TAG, "广播方式发送消息");
+                //原生模块发送事件
             reactContext
                     .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                     .emit(this.Key+eventName, params);
+            }
         }
     }
 
@@ -109,7 +119,7 @@ public class PullLayout extends ViewGroupManager<SmartRefreshLayout> {
     @Nullable
     @Override
     public Map getExportedCustomDirectEventTypeConstants() {
-        //第一个Login 注册的名字  第二个registrationName不可以改变 第三个js回调方法
+        //onRefreshReleased 注册的名字  第二个registrationName不可以改变 第三个js回调方法
         return MapBuilder.<String, Object>builder()
                 .put("onRefreshReleased", MapBuilder.of("registrationName", "onRefreshReleased"))
                 .build();
@@ -141,13 +151,23 @@ public class PullLayout extends ViewGroupManager<SmartRefreshLayout> {
         String key = args.getString(0);
         switch (commandId){
             case FinishRefresh:
+                if(this.method==1){
+                    root.finishRefresh();
+                }else{
+                    //广播方式
                 if(this.Key.equals(key)){
                     Log.i(TAG,"结束刷新");
                     root.finishRefresh();
                     CanRefresh = true;
                 }
+                }
                 return;
         }
+    }
+
+    @ReactProp(name = "method")
+    public void method(final SmartRefreshLayout refreshLayout,final int method) {
+        this.method = method;
     }
 
     @ReactProp(name = "Key")

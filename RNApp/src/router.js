@@ -16,21 +16,19 @@ import {
     DeviceEventEmitter,
     Image,
 } from 'react-native';
-import { StackNavigator,TabNavigator,NavigationActions } from 'react-navigation';
+import { StackNavigator,createBottomTabNavigator,NavigationActions } from 'react-navigation';
 import CardStackStyleInterpolator from 'react-navigation/src/views/StackView/StackViewStyleInterpolator';
+import Tab from './component/Tab'
 import Page1 from './page/Page1'
 import PageList from './page/PageList'
 import Page3 from './page/Page3'
 import Page4 from './page/Page4'
 import Web from "./page/Web";
+import HomePage from './Tab/HomePage'
+import ProjectPage from "./Tab/ProjectPage";
+import MinePage from './Tab/MinePage'
 
-const Routes = {
-    Page1:{screen:Page1},
-    PageList:{screen:PageList},
-    Page3:{screen:Page3},
-    Page4:{screen:Page4},
-    Web:{screen:Web},
-};
+
 
 //实现定义某个页面的动画效果
 const TransitionConfiguration = () => {
@@ -41,53 +39,64 @@ const TransitionConfiguration = () => {
             timing: Animated.timing,
         },
         screenInterpolator:CardStackStyleInterpolator.forHorizontal,
-        // screenInterpolator:freeStyle,
     };
 };
 
 const StackOptions = ({navigation}) => {
-    const gesturesEnabled = true;
-    const headerStyle= {
-        flexDirection: 'row',
-        justifyContent:'space-between',
-//        alignItems:'flex-end',//官方bug
-        height:60,
-        borderWidth: 0,
-        borderBottomWidth: 0,
-    };
-    const headerTitleStyle = {
-        backgroundColor:'transparent',
-        fontSize: FONT(17),
-        color: 'white',
-    };
-
-    const headerTintColor= 'white';
-    const headerLeft = (
-        <TouchableOpacity activeOpacity={1} onPress={()=>{
-            console.log('配置里面的navigation goback');
-            navigation.goBack(null)
-        }}>
-        </TouchableOpacity>
-    );
-    const headerRight=(<View style={{paddingRight:SCALE(30),width:SCALE(20),height:SCALE(37),backgroundColor:'red'}}>
-    </View>);
-    return {headerLeft,headerRight,headerStyle,gesturesEnabled,headerTitleStyle,headerTintColor,}
+    const gesturesEnabled = false;
+    const header = null
+    return {gesturesEnabled,header}
 };
 
+const tabbaroption = {
+    activeTintColor: Color.C0094ff,
+    inactiveTintColor: Color.C888888,
+    showIcon: true,
+};
 
+const TabContainer = createBottomTabNavigator(
+    {
+        HomePage: {
+            screen: HomePage
+        },
+        ProjectPage: {screen: ProjectPage,},
+        MinePage: {screen: MinePage,},
+    },
+    {
+        lazy: true,
+        swipeEnabled: false,
+        tabBarPosition: 'bottom',
+        animationEnabled: false,
+        backBehavior: 'none', // 按 back 键是否跳转到第一个Tab(首页)， none 为不跳转
+        configureTransition:TransitionConfiguration,
+        tabBarComponent:props => <Tab {...props}/>,
+        tabBarOptions: tabbaroption,
+    });
 
+const Routes = {
+    TabContainer:{screen: TabContainer},
+    Page1:{screen:Page1},
+    PageList:{screen:PageList},
+    Page3:{screen:Page3},
+    Page4:{screen:Page4},
+    Web:{screen:Web},
+};
 
 
 const AppNavigator = StackNavigator(
     {
         ...Routes,
-
+        Index: {
+            screen: TabContainer,
+        },
     },
     {
+        initialRouteName: 'Index',
         headerMode: 'screen',
+        gesturesEnabled:'false',
         mode: 'card',
         transitionConfig: TransitionConfiguration,
-       // navigationOptions: ({navigation}) => StackOptions({navigation}),
+        navigationOptions: ({navigation}) => StackOptions({navigation}),
     }
 );
 

@@ -40,24 +40,14 @@ export default class BasePage extends Component<Props> {
         // BasePage.Navigation_routers = routes;
         // console.log('BasePage.Navigation_routers',BasePage.Navigation_routers);
         // console.log('BasePage.nav',nav);
-        // let tabBarVisible = state.params&&state.params.tabBarVisible;
         return {
-            // tabBarLabel: '出借',
-            // tabBarIcon: ({tintColor,focused}) => (
-            //     <Image
-            //         style={{width:Platform.OS==='ios'?45/2:45/2,height:Platform.OS==='ios'?41/2:41/2}}
-            //         source={focused?AppImages.Common.bid_active:AppImages.Common.bid}/>
-            // ),
             header:({navigation}) =>{
                 let {state:{routes}} = navigation;
-                BasePage.Navigation_routers = routes;
+                BasePage.Navigation_routers = routes;//获取路由站必须放到这里
                 let title = routes[routes.length-1].params&&routes[routes.length-1].params.title;
                 console.log('BasePage.routes',routes);
-                return <Header
-                    navigation = {navigation}
-                    centerTxt = {title}/>;
+                return <Header navigation = {navigation} centerTxt = {title}/>;
             },
-            // tabBarVisible:tabBarVisible,
         }
     };
 
