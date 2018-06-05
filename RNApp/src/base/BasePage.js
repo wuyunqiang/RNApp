@@ -27,7 +27,9 @@ import ModalUtil from '../utils/ModalUtil'
 import Toast from "react-native-root-toast";
 import Status from '../utils/Status'
 import Header from '../component/Header'
-import Page1 from "../page/Page1";
+import * as Style from '../style';
+
+global.Style = Style;
 // import SplashScreen from "react-native-splash-screen";
 // import CodePush from 'react-native-code-push';
 type Props = {};

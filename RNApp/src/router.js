@@ -27,7 +27,7 @@ import Web from "./page/Web";
 import HomePage from './Tab/HomePage'
 import ProjectPage from "./Tab/ProjectPage";
 import MinePage from './Tab/MinePage'
-
+import InputPage from './page/InputPage'
 
 
 //实现定义某个页面的动画效果
@@ -80,30 +80,34 @@ const Routes = {
     Page3:{screen:Page3},
     Page4:{screen:Page4},
     Web:{screen:Web},
+    InputPage:{screen:InputPage},
 };
 
 
-const AppNavigator = StackNavigator(
-    {
-        ...Routes,
-        Index: {
-            screen: TabContainer,
+const AppNavigator = (initialRoute = "Index")=>{//通过参数动态配置初始化路由
+    return StackNavigator(
+        {
+            ...Routes,
+            Index: {
+                screen: TabContainer,
+            },
         },
-    },
-    {
-        initialRouteName: 'Index',
-        headerMode: 'screen',
-        gesturesEnabled:'false',
-        mode: 'card',
-        transitionConfig: TransitionConfiguration,
-        navigationOptions: ({navigation}) => StackOptions({navigation}),
-    }
-);
+        {
+            initialRouteName: initialRoute,
+            headerMode: 'screen',
+            gesturesEnabled:'false',
+            mode: 'card',
+            transitionConfig: TransitionConfiguration,
+            navigationOptions: ({navigation}) => StackOptions({navigation}),
+        }
+    );
+}
 
 
-const defaultStateAction = AppNavigator.router.getStateForAction;
 
-AppNavigator.router.getStateForAction = (action, state) => {
+const defaultStateAction = AppNavigator().router.getStateForAction;
+
+AppNavigator().router.getStateForAction = (action, state) => {
     if (state && action.key && action.type === 'Navigation/BACK') {
         const desiredRoute = state.routes.find((route) => route.routeName === action.key)
         if (desiredRoute) {
@@ -130,4 +134,29 @@ AppNavigator.router.getStateForAction = (action, state) => {
     return defaultStateAction(action, state)
 }
 
-export default AppNavigator;
+export default class Root extends Component{
+
+    constructor(){
+        super();
+        // this.readFile();
+    }
+
+    componentDidMount() {
+    }
+
+
+    //清除缓存
+    clearData(){
+        CLEAR_All();
+    }
+
+    readFile(){//读取缓存
+
+    }
+
+    render(){
+        let Navigator= AppNavigator('Index');
+        return <Navigator/>
+    }
+
+}

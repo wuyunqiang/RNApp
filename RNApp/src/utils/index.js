@@ -5,6 +5,7 @@ import './HttpUtil'
 import './iphoneX'
 import './CheckUtil'
 
+
 export const deviceWidth = Dimensions.get('window').width;      //设备的宽度
 export const deviceHeight = Dimensions.get('window').height;    //设备的高度
 let fontScale = PixelRatio.getFontScale();                      //返回字体大小缩放比例
@@ -57,7 +58,8 @@ global.WIDTH = deviceWidth;
 
 global.HEIGHT = deviceHeight;
 
-global.Log = Log
+global.Log = Log;
+
 
 
 

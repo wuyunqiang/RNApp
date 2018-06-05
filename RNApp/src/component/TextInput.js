@@ -11,12 +11,10 @@ export default class Input extends React.Component {
         super();
         this.state = {
             focus:false,
-        }
+        };
+        this.content=null;
     }
 
-    shouldComponentUpdate(nextProps, nextState) {
-        return true;
-    }
 
     clear = ()=>{
         Log('this.textinput 执行了这里清除text')
@@ -40,12 +38,16 @@ export default class Input extends React.Component {
     };
 
     onEndEditing = ()=>{
-        Log('是否执行了这里 失去焦点')
-        this.setState({
-            focus:false,
-        });
-        this.props.onEndEditing&&this.props.onEndEditing()
-    }
+        this.props.onEndEditing&&this.props.onEndEditing(this.content)
+    };
+
+    onChangeText = (content)=>{
+        if(this.props.onChangeText){
+            this.props.onChangeText(content);
+        }else{
+           this.content = content;
+        }
+    };
 
     render (){
         return (
@@ -56,6 +58,7 @@ export default class Input extends React.Component {
                 style={{padding:0,...this.props.style}}
                 ref = 'textinput'
                 autoFocus = {this.state.focus}
+                onChangeText={this.onChangeText}
                 onEndEditing = {this.onEndEditing}
             />
         )

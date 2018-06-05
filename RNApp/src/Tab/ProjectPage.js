@@ -70,7 +70,9 @@ export default class ProjectPage extends BasePage {
                 contentContainerStyle={{alignItems: 'center',}}
                 style={{flex: 1,backgroundColor:'white'}}>
 
-                <View style={styles.itemStyle}/>
+                <TouchableOpacity style={styles.itemStyle} onPress={()=>super.navigate('InputPage')}>
+                    <Text style={styles.textStyle}>{'测试textinput'}</Text>
+                </TouchableOpacity>
                 <View style={styles.itemStyle}/>
                 <View style={styles.itemStyle}/>
                 <View style={styles.itemStyle}/>

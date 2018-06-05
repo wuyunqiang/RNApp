@@ -9,7 +9,7 @@ const storage = new Storage({
     storageBackend: AsyncStorage,
 
     // 数据过期时间，默认一整天（1000 * 3600 * 24 毫秒），设为null则永不过期
-    defaultExpires: 1000 * 3600 * 24,
+    defaultExpires: 1000 * 3600, // 一小时数据过期
 
     // 读写时在内存中缓存数据。默认启用。
     enableCache: true,
@@ -20,6 +20,37 @@ const storage = new Storage({
 });
 
 global.storage = storage;
+
+
+// 读取缓存
+let readKeyCache = (key,res,error)=>{
+    storage.load({
+        key: key,
+        autoSync: true,
+        syncInBackground: true
+    }).then(ret => {
+        res(ret);
+    }).catch(err => {
+        error(err)
+    });
+};
+
+global.READ_Key_CACHE = readKeyCache;
+
+
+// 写入缓存
+let writeKeyCache = (key,data,expires)=>{
+
+    storage.save({
+        key: key,  //注意:请不要在key中使用_下划线符号!
+        data: data,
+        // 如果不指定过期时间，则会使用defaultExpires参数
+        // 如果设为null，则永不过期  1000 * 3600
+        expires: null
+    });
+};
+
+global.WRITE_Key_CACHE = writeKeyCache;
 
 // 读取缓存
 let readCache = (id,res,error)=>{
@@ -47,7 +78,7 @@ let writeCache = (id,data,expires)=>{
 
         // 如果不指定过期时间，则会使用defaultExpires参数
         // 如果设为null，则永不过期  1000 * 3600
-        expires: expires
+        // expires: expires
     });
 };
 
@@ -69,3 +100,19 @@ let clearAll = ()=>{
 };
 
 global.CLEAR_All = clearAll;
+
+
+// 使用和load方法一样的参数读取批量数据，但是参数是以数组的方式提供。
+// 会在需要时分别调用相应的sync方法，最后统一返回一个有序数组。
+let BatchData = (ids, res, err) => {
+    let id = Array.from(ids).map((v) => {
+        return {key: Key, id: v}
+    });
+    storage.getBatchData(id)
+        .then(results => {
+            res(results);
+        }).catch((error) => {
+        err && err(error)
+    })
+};
+global.ReadBatchData = BatchData;
