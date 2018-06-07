@@ -54,7 +54,7 @@ export default class BasePage extends Component<Props> {
     };
 
     render(){
-        return <View style={{flex:1,backgroundColor:'white'}}>
+        return <View style={{flex:1,backgroundColor:'transparent'}}>
             {this.renderNonNetWork()}
             {this.renderModal(this.state.loading?this.renderLoading:this.contentView,this.state.visible,this.state.customerlayout,'fade')}
             {this.renderPage&&this.renderPage()}

@@ -542,7 +542,7 @@ const styles = StyleSheet.create({
         height:HEIGHT,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: Color.f3f3f3
+        backgroundColor: 'transparent'
     },
     footer:{
         height: 50,

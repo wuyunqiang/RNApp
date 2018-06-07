@@ -6,6 +6,7 @@ import android.support.multidex.MultiDex;
 
 import com.facebook.react.ReactApplication;
 import com.dylanvann.fastimage.FastImageViewPackage;
+import com.facebook.react.uimanager.UIImplementationProvider;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import com.facebook.react.ReactNativeHost;
@@ -35,6 +36,7 @@ public class MainApplication extends Application implements ReactApplication {
       );
     }
 
+
     @Override
     protected String getJSMainModuleName() {
       return "index";
@@ -57,4 +59,7 @@ public class MainApplication extends Application implements ReactApplication {
     super.attachBaseContext(base);
     MultiDex.install(this);
   }
+
+
+
 }

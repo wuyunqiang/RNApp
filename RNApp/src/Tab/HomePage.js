@@ -73,9 +73,9 @@ export default class HomePage extends BasePage {
                 onPullRelease={this.onPullRelease}
                 contentContainerStyle={{alignItems: 'center',}}
                 showsVerticalScrollIndicator={false}
-                style={{flex: 1,backgroundColor:'white'}}>
+                style={{flex: 1,backgroundColor:'transparent'}}>
 
-                <TouchableOpacity style={styles.itemStyle} onPress={this.goToPage}>
+                <TouchableOpacity style={[styles.itemStyle,{backgroundColor:'transparent'}]} onPress={this.goToPage}>
                     <Text style={styles.textStyle}>这是HomePage</Text>
                     <Text style={styles.textStyle}>跳转到Page2</Text>
                 </TouchableOpacity>
@@ -83,7 +83,13 @@ export default class HomePage extends BasePage {
                 <TouchableOpacity style={styles.itemStyle} activeOpacity={0.7} onPress={()=>super.navigate('Web')}>
                     <Text style={styles.textStyle}>gotoWebview</Text>
                 </TouchableOpacity>
+                <TouchableOpacity activeOpacity={0.7} onPress={()=>
+                    this.setState({
+                        visible: !this.state.visible
+                    })}>
+
                 <View style={styles.itemStyle}/>
+                </TouchableOpacity>
                 <View style={styles.itemStyle}/>
                 <View style={styles.itemStyle}/>
                 <View style={styles.itemStyle}/>

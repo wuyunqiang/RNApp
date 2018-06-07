@@ -40,11 +40,38 @@ export default class MinePage extends BasePage {
         super(props);
         this.state = {
             ...this.BaseState,
+            test1:1,
+            test2:1,
         }
     }
 
     componentDidMount(){
         super.componentDidMount();
+        this.setState({
+            test1:this.state.test1+1,
+        },()=> {
+            Log('MinePage this.state',this.state)
+        })
+        this.setState({
+            test1:this.state.test1+1,
+            test2:this.state.test2+1,
+        },()=> {
+            Log('MinePage this.state',this.state)
+        })
+
+        this.setState((state,props)=>{
+            Log('MinePage state',state);
+            Log('MinePage props',props);
+            return {
+                test2:state.test2+10,
+            }
+        },()=>{
+            Log('MinePage state this.state',this.state)
+        })
+        Log('MinePage this.state',this.state);
+
+        Log('hahahahhahaha');
+        Log('gagagagaga');
     }
 
 

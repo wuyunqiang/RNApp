@@ -16,7 +16,7 @@ import {
     DeviceEventEmitter,
     Image,
 } from 'react-native';
-import { StackNavigator,createBottomTabNavigator,NavigationActions } from 'react-navigation';
+import { createStackNavigator,createBottomTabNavigator,NavigationActions } from 'react-navigation';
 import CardStackStyleInterpolator from 'react-navigation/src/views/StackView/StackViewStyleInterpolator';
 import Tab from './component/Tab'
 import Page1 from './page/Page1'
@@ -61,6 +61,8 @@ const TabContainer = createBottomTabNavigator(
         },
         ProjectPage: {screen: ProjectPage,},
         MinePage: {screen: MinePage,},
+        Project: {screen: ProjectPage,},
+        Mine: {screen: MinePage,},
     },
     {
         lazy: true,
@@ -85,7 +87,7 @@ const Routes = {
 
 
 const AppNavigator = (initialRoute = "Index")=>{//通过参数动态配置初始化路由
-    return StackNavigator(
+    return createStackNavigator(
         {
             ...Routes,
             Index: {

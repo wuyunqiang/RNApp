@@ -46,7 +46,7 @@ export default class App extends Component {
             <PullLayout
                 method={(this.props.method==1||this.props.method==2)?this.props.method:2}
                 ref = {(pull)=>{this.pullLayout = pull}}
-                style={[{flex: 1,backgroundColor:'white',},this.props.style]}
+                style={[{flex: 1,},this.props.style]}
                 EnableOverScrollDrag = {true}
                 EnableOverScrollBounce = {false}
                 DisableContentWhenRefresh = {false}

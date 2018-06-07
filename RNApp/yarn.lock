@@ -4371,13 +4371,13 @@ react-native-drawer-layout@1.3.2:
   dependencies:
     react-native-dismiss-keyboard "1.0.0"
 
-react-native-fast-image@^4.0.14:
+react-native-fast-image@4.0.14:
   version "4.0.14"
   resolved "http://registry.npm.taobao.org/react-native-fast-image/download/react-native-fast-image-4.0.14.tgz#1e84c9a01b1471793e294ef4e7c3cc20e09562a0"
   dependencies:
     prop-types "^15.5.10"
 
-react-native-fetch-blob@^0.10.8:
+react-native-fetch-blob@0.10.8:
   version "0.10.8"
   resolved "http://registry.npm.taobao.org/react-native-fetch-blob/download/react-native-fetch-blob-0.10.8.tgz#4fc256abae0cb5f10e7c41f28c11b3ff330d72a9"
   dependencies:
@@ -4391,7 +4391,7 @@ react-native-root-siblings@^3.0.0:
     react-redux "*"
     static-container "^1.0.0"
 
-react-native-root-toast@^3.0.1:
+react-native-root-toast@3.0.1:
   version "3.0.1"
   resolved "http://registry.npm.taobao.org/react-native-root-toast/download/react-native-root-toast-3.0.1.tgz#ad0a37c46bc72971a229c7784df25147004e5538"
   dependencies:
@@ -4404,7 +4404,7 @@ react-native-safe-area-view@^0.7.0:
   dependencies:
     hoist-non-react-statics "^2.3.1"
 
-react-native-storage@^0.2.2:
+react-native-storage@0.2.2:
   version "0.2.2"
   resolved "http://registry.npm.taobao.org/react-native-storage/download/react-native-storage-0.2.2.tgz#4449197f122b2da0650e3704e1f050260ed58d9f"
 
@@ -4420,7 +4420,7 @@ react-native-tab-view@~0.0.77:
   dependencies:
     prop-types "^15.6.0"
 
-react-native-vector-icons@^4.6.0:
+react-native-vector-icons@4.6.0:
   version "4.6.0"
   resolved "http://registry.npm.taobao.org/react-native-vector-icons/download/react-native-vector-icons-4.6.0.tgz#e4014311ffa6de397d914ffc31b7097a874cc8d5"
   dependencies:
@@ -4428,7 +4428,7 @@ react-native-vector-icons@^4.6.0:
     prop-types "^15.5.10"
     yargs "^8.0.2"
 
-react-native@^0.55.4:
+react-native@0.55.4:
   version "0.55.4"
   resolved "http://registry.npm.taobao.org/react-native/download/react-native-0.55.4.tgz#eecffada3750a928e2ddd07cf11d857ae9751c30"
   dependencies:
@@ -4508,7 +4508,7 @@ react-navigation-tabs@0.2.0:
     react-native-safe-area-view "^0.7.0"
     react-native-tab-view "~0.0.77"
 
-react-navigation@^2.0.1:
+react-navigation@2.0.1:
   version "2.0.1"
   resolved "http://registry.npm.taobao.org/react-navigation/download/react-navigation-2.0.1.tgz#adeba4eb16307c0f740c6c9efafd0c0aa6d47002"
   dependencies:
@@ -4530,7 +4530,7 @@ react-proxy@^1.1.7:
     lodash "^4.6.1"
     react-deep-force-update "^1.0.0"
 
-react-redux@*, react-redux@^5.0.7:
+react-redux@*, react-redux@5.0.7:
   version "5.0.7"
   resolved "http://registry.npm.taobao.org/react-redux/download/react-redux-5.0.7.tgz#0dc1076d9afb4670f993ffaef44b8f8c1155a4c8"
   dependencies:
@@ -4627,7 +4627,7 @@ realpath-native@^1.0.0:
   dependencies:
     util.promisify "^1.0.0"
 
-redux@^3.7.2:
+redux@3.7.2:
   version "3.7.2"
   resolved "http://registry.npm.taobao.org/redux/download/redux-3.7.2.tgz#06b73123215901d25d065be342eb026bc1c8537b"
   dependencies:
