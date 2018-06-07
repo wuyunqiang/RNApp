@@ -12,4 +12,4 @@ react-native run-andorid/ios<br>
 ![iosRNApp.gif](https://upload-images.jianshu.io/upload_images/3353755-abf3db78c02ad8b6.gif?imageMogr2/auto-orient/strip)
 ![androidRNApp.gif](https://upload-images.jianshu.io/upload_images/3353755-c83ed6d7577bb994.gif?imageMogr2/auto-orient/strip)
 
-![react-navigation凸起效果.png](https://upload-images.jianshu.io/upload_images/3353755-454816c4ac1849f3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/800)
+![react-navigation凸起效果.png](https://user-images.githubusercontent.com/13480948/41094149-dd6f256e-6a7f-11e8-9d30-f47a9c3d0db2.png)
