@@ -75,7 +75,7 @@ export default class HomePage extends BasePage {
                 showsVerticalScrollIndicator={false}
                 style={{flex: 1,backgroundColor:'transparent'}}>
 
-                <TouchableOpacity style={[styles.itemStyle,{backgroundColor:'transparent'}]} onPress={this.goToPage}>
+                <TouchableOpacity style={[styles.itemStyle]} onPress={this.goToPage}>
                     <Text style={styles.textStyle}>这是HomePage</Text>
                     <Text style={styles.textStyle}>跳转到Page2</Text>
                 </TouchableOpacity>

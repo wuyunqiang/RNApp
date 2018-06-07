@@ -61,8 +61,6 @@ const TabContainer = createBottomTabNavigator(
         },
         ProjectPage: {screen: ProjectPage,},
         MinePage: {screen: MinePage,},
-        Project: {screen: ProjectPage,},
-        Mine: {screen: MinePage,},
     },
     {
         lazy: true,
