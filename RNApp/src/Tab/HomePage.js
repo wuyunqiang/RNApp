@@ -27,6 +27,7 @@ export default class HomePage extends BasePage {
     static navigationOptions = (nav)=>{
         let state =  nav.navigation.state;
         let tabBarVisible = state.params&&state.params.tabBarVisible;
+
         return {
             tabBarLabel: '首页',
             tabBarIcon: ({tintColor,focused}) => (
@@ -45,6 +46,17 @@ export default class HomePage extends BasePage {
 
     componentDidMount(){
         super.componentDidMount();
+        let obj = {
+            i: 10,
+            b: () => console.log(this.i, this),
+            c: function() {
+                console.log( this.i, this)
+            }
+        }
+        obj.b();
+// undefined Window
+        obj.c();
+// 10, Object {...}
     }
 
 

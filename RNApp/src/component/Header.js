@@ -87,11 +87,11 @@ const header = {
         paddingTop: 44,
         height: 88
     }, {
-        paddingTop: Platform.OS === "ios" ? 20 :0,
-        height:Platform.OS === 'ios' ? 64 : 44,
+        paddingTop: Platform.OS === "ios" ? 20 :20,
+        height:Platform.OS === 'ios' ? 64 : 64,
     }),
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: 'white'
+    backgroundColor: '#9E9E9E'
 }

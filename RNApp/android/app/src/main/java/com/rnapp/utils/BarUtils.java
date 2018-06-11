@@ -424,7 +424,7 @@ public final class BarUtils {
         return statusBarView;
     }
 
-    private static void transparentStatusBar(final Activity activity) {
+    public static void transparentStatusBar(final Activity activity) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) return;
         Window window = activity.getWindow();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

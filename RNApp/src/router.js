@@ -156,7 +156,11 @@ export default class Root extends Component{
 
     render(){
         let Navigator= AppNavigator('Index');
-        return <Navigator/>
+        return <View style={{flex:1}}>
+
+            <Navigator/>
+        </View>
+
     }
 
 }

@@ -1,6 +1,7 @@
 package com.rnapp;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.view.WindowManager;
 
 import com.facebook.react.ReactActivity;
 import com.rnapp.utils.BarUtils;
+import com.rnapp.utils.Utils;
 
 public class MainActivity extends ReactActivity {
 
@@ -25,10 +27,19 @@ public class MainActivity extends ReactActivity {
         return "RNApp";
     }
 
+
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
-        BarUtils.setStatusBarColor(this, Color.BLUE);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initStatusBar();
+//        Intent it = new Intent(this,NativeActivity.class);
+//        startActivity(it);
     }
+
+    private void initStatusBar(){
+        Utils.init(this.getApplication());
+        BarUtils.setStatusBarAlpha(this, 0);
+    }
+
 
 }
