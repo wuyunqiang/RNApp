@@ -13,7 +13,7 @@ import {
     DeviceEventEmitter,
 } from 'react-native';
 import PropTypes from 'prop-types';
-var WebViewNative = requireNativeComponent('WebViewManager',H5WebView);
+let WebViewNative = requireNativeComponent('WebViewManager',H5WebView);
 export default class H5WebView extends Component {
 
     static navigationOptions = {
@@ -23,22 +23,9 @@ export default class H5WebView extends Component {
     constructor(props){
         super(props);
         this.state = {
+            msg:'test',
         };
     }
-
-    componentDidMount() {
-    }
-
-    componentWillUnmount() {
-    }
-
-    callBack = (res)=>{
-    };
-
-    toLogin = ()=>{
-        // this.props.navigation.navigate("Login",{from:"native",H5CallBackFuc:this.callBack});
-    };
-
 
     onMessage = (e)=>{
         let params = e.nativeEvent.data;
@@ -66,13 +53,12 @@ export default class H5WebView extends Component {
             ref={(c) => {this.WebViewNative = c;}}
             style={{flex:1, backgroundColor:'blue'}}
             url={"https://github.com/wuyunqiang"}
-            onMessage={this.onMessage}
+            onMessage={this.onMessage} //接收js的数据方法
             onPageStarted={this.onPageStarted}
             onPageFinished = {this.onPageFinished}
             onReceivedTitle = {this.onReceivedTitle}
             onProgressChanged = {this.onProgressChanged}
-            // onLogin = {this.toLogin}
-            // postMsg={this.state.msg}
+            postMessage={this.state.msg}//发送给js的数据
         />)
     }
 }
@@ -80,6 +66,10 @@ export default class H5WebView extends Component {
 WebViewNative.propTypes = {
     ...View.propTypes,
     url: PropTypes.string,
-    token:PropTypes.string,
-    onLogin:PropTypes.func,
+    postMessage:PropTypes.string,
+    onMessage:PropTypes.func,
+    onPageStarted:PropTypes.func,
+    onPageFinished:PropTypes.func,
+    onReceivedTitle:PropTypes.func,
+    onProgressChanged:PropTypes.func,
 };
