@@ -7,6 +7,7 @@ import com.facebook.react.uimanager.ViewManager;
 import com.rnapp.rnmodules.NativeUtil;
 import com.rnapp.rnview.PopModalManager;
 import com.rnapp.rnview.PullLayout;
+import com.rnapp.rnview.WebViewManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,7 @@ public class RNPackage implements ReactPackage {
         List<ViewManager> views = new ArrayList<>();
         views.add(new PullLayout());
         views.add(new PopModalManager());
+        views.add(new WebViewManager());
         return views;
     }
 }

@@ -76,6 +76,10 @@ project.ext.react = [
         entryFile: "index.js"
 ]
 
+project.ext {
+    excludeAppGlideModule = true
+}
+
 apply from: "../../node_modules/react-native/react.gradle"
 
 /**
@@ -155,6 +159,7 @@ repositories {
 }
 
 dependencies {
+    compile 'com.github.lzyzsd:jsbridge:1.0.4'
     implementation 'com.android.support.constraint:constraint-layout:1.1.1'
     compile project(':react-native-fast-image')
     compile project(':react-native-vector-icons')

@@ -30,7 +30,7 @@ export default class Tab extends Component {
         };
 
         if(index==Math.floor(count/2)){
-           return <View style={{width:WIDTH/count}}/>//占位使用
+           return <View key={""+index} style={{width:WIDTH/count}}/>//占位使用
         }
 
         Log('Tab route',route);

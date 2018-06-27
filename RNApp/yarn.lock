@@ -4371,7 +4371,7 @@ react-native-drawer-layout@1.3.2:
   dependencies:
     react-native-dismiss-keyboard "1.0.0"
 
-react-native-fast-image@4.0.14:
+react-native-fast-image@^4.0.14:
   version "4.0.14"
   resolved "http://registry.npm.taobao.org/react-native-fast-image/download/react-native-fast-image-4.0.14.tgz#1e84c9a01b1471793e294ef4e7c3cc20e09562a0"
   dependencies:

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div><br>
+</div>
+<div>
+    <div>Created by wuyunqiang</div>
+    <div>驼峰式：第二个单词首字母大写</div>
+    <div>大驼峰式：每个单词的首字母都是大写的</div>
+    <div>默认是驼峰式</div>
+    <div><br>
+    </div>
+    <div>## 一:文件</div>
+    <div>1：文件夹 全部小写字母&nbsp;</div>
+    <div>&nbsp; &nbsp; &nbsp; 例如：page，component，assets</div>
+    <div><br>
+    </div>
+    <div>2：js文件 大驼峰式规范&nbsp;</div>
+    <div>&nbsp; &nbsp; &nbsp; 页面Page结尾</div>
+    <div>&nbsp; &nbsp; &nbsp; 工具Util结尾</div>
+    <div>&nbsp; &nbsp; &nbsp; 原生组件Android||IOS结尾 最后统一导出&nbsp;</div>
+    <div>&nbsp;例如：</div>
+    <div>&nbsp; &nbsp; &nbsp; &nbsp;HomePage</div>
+    <div>&nbsp; &nbsp; &nbsp; &nbsp;HttpUtil</div>
+    <div>&nbsp; &nbsp; &nbsp; &nbsp;WebAndroid||WebIOS=&gt;统一在Web.js里面导出</div>
+    <div><br>
+    </div>
+    <div><br>
+    </div>
+    <div>## 二:变量</div>
+    <div>### 禁止使用var &nbsp;</div>
+    <div>实例变量let</div>
+    <div>实例常量const</div>
+    <div>静态属性static</div>
+    <div><br>
+    </div>
+    <div>1：全局属性(项目启动即引用) &nbsp; 全部大写</div>
+    <div>&nbsp; &nbsp; &nbsp;例如：&nbsp;</div>
+    <div>&nbsp; &nbsp; &nbsp;global.WIDTH = deviceWidth;</div>
+    <div><br>
+    </div>
+    <div>2：静态属性(局部页面使用,使用才引用) 类型+驼峰式命名</div>
+    <div>例如：</div>
+    <div>Array &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;a &nbsp; &nbsp; &nbsp; &nbsp;aNameList</div>
+    <div>
+        string
+        <span className="Apple-tab-span" style="white-space:pre">	</span>
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; s
+        <span className="Apple-tab-span" style="white-space:pre">	</span>
+        &nbsp; &nbsp; sName
+    </div>
+    <div>
+        Boolean
+        <span className="Apple-tab-span" style="white-space:pre">	</span>
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; b
+        <span className="Apple-tab-span" style="white-space:pre">	</span>
+        &nbsp; &nbsp; bVisible
+    </div>
+    <div>
+        Float
+        <span className="Apple-tab-span" style="white-space:pre">	</span>
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; f
+        <span className="Apple-tab-span" style="white-space:pre">	</span>
+        &nbsp; &nbsp; fMoney
+    </div>
+    <div>
+        Function
+        <span className="Apple-tab-span" style="white-space:pre">	</span>
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;fn
+        <span className="Apple-tab-span" style="white-space:pre">	</span>
+        &nbsp; &nbsp; fnMethod
+    </div>
+    <div>
+        Int
+        <span className="Apple-tab-span" style="white-space:pre">	</span>
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;i
+        <span className="Apple-tab-span" style="white-space:pre">	</span>
+        &nbsp; &nbsp; &nbsp;iAge
+    </div>
+    <div>
+        Object
+        <span className="Apple-tab-span" style="white-space:pre">	</span>
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;o
+        <span className="Apple-tab-span" style="white-space:pre">	</span>
+        &nbsp; &nbsp; &nbsp;oType
+    </div>
+    <div>
+        Regexp &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;re
+        <span className="Apple-tab-span" style="white-space:pre">	</span>
+        &nbsp; &nbsp; &nbsp;rePattern(正则表达式)
+    </div>
+    <div>
+        可变类型
+        <span className="Apple-tab-span" style="white-space:pre">	</span>
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;v
+        <span className="Apple-tab-span" style="white-space:pre">	</span>
+        &nbsp; &nbsp; &nbsp;vObj
+    </div>
+    <div>例如：</div>
+    <div>```</div>
+    <div>引用方式通过 类名+变量名</div>
+    <div>CacheData.sPhone = "";</div>
+    <div>CacheData.sToken = "";</div>
+    <div>CacheData.oPerson = {};</div>
+    <div>```</div>
+    <div><br>
+    </div>
+    <div>3：类变量(需要更新UI 不需要更新UI) &nbsp;类型+驼峰式命名</div>
+    <div>```</div>
+    <div>需要更新UI</div>
+    <div>this.state = {</div>
+    <div>&nbsp; &nbsp; bFlag:true,</div>
+    <div>&nbsp; &nbsp; sNum:"",</div>
+    <div>&nbsp; &nbsp; oPerson:{},</div>
+    <div>}</div>
+    <div>不需要更新UI</div>
+    <div>this.bFlag=true</div>
+    <div>this.sNum = ""</div>
+    <div>this.oPerson = {}</div>
+    <div>```</div>
+    <div><br>
+    </div>
+    <div>4:实例变量 &nbsp; _{驼峰式组件名字}</div>
+    <div>&nbsp; &nbsp;```</div>
+    <div>&nbsp; &nbsp;this.refs._textInput</div>
+    <div>&nbsp; &nbsp;this._scrollView</div>
+    <div>&nbsp; &nbsp;```</div>
+    <div><br>
+    </div>
+    <div>## 三:方法</div>
+    <div>#### 1：静态方法 大驼峰式</div>
+    <div>```</div>
+    <div>例如：</div>
+    <div>Http.Post()</div>
+    <div>Cache.GetToken()</div>
+    <div>```</div>
+    <div>#### 2：功能型&nbsp;</div>
+    <div>&nbsp; &nbsp; &nbsp; can,is,get,set,init,show,hide,query,sort,check,</div>
+    <div>&nbsp; &nbsp; &nbsp; 名称+业务名称 驼峰式命名</div>
+    <div>#### 3：动作型 xxxxAction&nbsp;</div>
+    <div>&nbsp; &nbsp; &nbsp; 由用户触发的操作,第一个函数一定是Action&nbsp;</div>
+    <div>```</div>
+    <div>例如：用户点击登录函数调用如下</div>
+    <div>loginAction(点击事件)-&gt;checkData(功能型)-&gt;(功能型)-&gt;(功能型)-&gt;Http.Post(this.state.oUser)</div>
+    <div>```</div>
+    <div>#### 4：回调型</div>
+    <div>##### 1：父子组件间回调 onXXX</div>
+    <div>```</div>
+    <div>&nbsp;例如：</div>
+    <div>&nbsp; return (&lt;Parent&gt;&nbsp;</div>
+    <div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&lt;Son1
+        sName={this.state.sName} onShowDialog={this.showDialog}/&gt;</div>
+    <div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;/Parent&gt;)</div>
+    <div>//子组件使用</div>
+    <div>//this.props.onShowDialog(this.state.bVisible);</div>
+    <div>```</div>
+    <div>##### 2：页面回调 XXXCallBack</div>
+    <div>2.1:</div>
+    <div>A navigate B</div>
+    <div>```</div>
+    <div>A页面</div>
+    <div>&nbsp;loginCallBack =(data)=&gt;{doSometing}</div>
+    <div>&nbsp;this.props.navigation.navigate(page,{loginCallBack:this.loginCallBack});</div>
+    <div><br>
+    </div>
+    <div>B页面执行</div>
+    <div>loginCallBack(data)</div>
+    <div>```</div>
+    <div><br>
+    </div>
+    <div>2.2:</div>
+    <div>A通过回调监听B页面的广播</div>
+    <div>```</div>
+    <div>//A页面</div>
+    <div>&nbsp;DeviceEventEmitter.addListener('isLogin',(data)=&gt;{</div>
+    <div>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; this.loginCallBack(data)</div>
+    <div>&nbsp; &nbsp; &nbsp; &nbsp; });
+    </div>
+    <div>&nbsp;//B页面</div>
+    <div>&nbsp;DeviceEventEmitter.emit('isLogin', data);</div>
+    <div>```</div>
+    <div><br>
+    </div>
+    <div>## 四:组件化</div>
+    <div>### 禁止在render方法里面写太多代码</div>
+    <div>纯组件：独立于事件，业务，每个项目都可以复用。</div>
+    <div>业务组件：和本项目相关联</div>
+    <div>页面：都多个业务组件组合</div>
+</div>
+<div><br>
+</div>
+<div>
+    <includetail><!--<![endif]--></includetail>
+</div>
+
+</body>
+</html>

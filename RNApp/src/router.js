@@ -24,10 +24,12 @@ import PageList from './page/PageList'
 import Page3 from './page/Page3'
 import Page4 from './page/Page4'
 import Web from "./page/Web";
+import WebAndroid from './component/WebViewAndroid'
 import HomePage from './Tab/HomePage'
 import ProjectPage from "./Tab/ProjectPage";
 import MinePage from './Tab/MinePage'
 import InputPage from './page/InputPage'
+import WaterFall from "./page/WaterFall";
 
 
 //实现定义某个页面的动画效果
@@ -80,7 +82,9 @@ const Routes = {
     Page3:{screen:Page3},
     Page4:{screen:Page4},
     Web:{screen:Web},
+    WebAndroid:{screen:WebAndroid},
     InputPage:{screen:InputPage},
+    WaterFall:{screen:WaterFall},
 };
 
 

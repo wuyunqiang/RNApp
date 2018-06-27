@@ -88,6 +88,7 @@ export default class MinePage extends BasePage {
     };
 
     renderPage(){
+
         return (
             <PullScroll
                 showsVerticalScrollIndicator={false}

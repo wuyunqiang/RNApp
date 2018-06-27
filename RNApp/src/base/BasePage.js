@@ -69,7 +69,7 @@ export default class BasePage extends Component<Props> {
             isNet:true,
             visible:false,
             loading:false,
-            customerlayout:{justifyContent:'center',alignItems:'center'}
+            customerlayout:{justifyContent:'center',alignItems:'center',backgroundColor:'red'}
         };
         NetInfo.addEventListener('connectionChange', this.HandleConnectivityChange);
 
@@ -468,7 +468,7 @@ export default class BasePage extends Component<Props> {
             return (<View  style={{width:'100%',height:'100%',backgroundColor:'white', justifyContent:'center', alignItems:'center'}}>
                 <Image
                     style={{width:229, height:141}}
-                    source={AppImages.Web.nonet}/>
+                    source={AppImages.Common.nodata}/>
                 <Text style={{fontSize:16,color:"#333333",marginTop:50,marginBottom:60,}}>网络无法刷新，请检查您的网络</Text>
                 <TouchableOpacity style={{width:258,height:35,justifyContent:'center', alignItems:'center'}}
                                   activeOpacity={0.8}

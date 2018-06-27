@@ -41,23 +41,51 @@ export default class HomePage extends BasePage {
         super(props);
         this.state = {
             ...this.BaseState,
+            bFlag:true,
+            sNum:"",
+            oPerson:{},
         }
     }
 
     componentDidMount(){
         super.componentDidMount();
-        let obj = {
-            i: 10,
-            b: () => console.log(this.i, this),
-            c: function() {
-                console.log( this.i, this)
-            }
+        var s = "Th,e ra,in i,n Sp,ain fa,lls mai,nly in the pla,in.";
+        // 在每个空格字符处进行分解。
+        ss = s.split(" ");
+        var arr = [];
+        console.log(ss);
+        for(let i=0;i<ss.length;i++){
+            let temp = ss[i].split(",");
+            arr.push(...temp);
         }
-        obj.b();
-// undefined Window
-        obj.c();
-// 10, Object {...}
+        console.log('arr',arr)
     }
+
+
+    type(obj) {
+        let class2type = {};
+        // 生成class2type映射
+        "Boolean Number String Function Array Date RegExp Object Error".split(" ").map(function(item, index) {
+            class2type["[object " + item + "]"] = item.toLowerCase();
+        })
+
+        // 一箭双雕 undefined null 值相等 类型不等
+        if (obj == null) {
+            return obj + "";
+        }
+
+        // 优先ES6方法判断数组类型
+        if(Array.isArray(obj)){
+            return "array"
+        }
+
+        return typeof obj === "object" || typeof obj === "function" ?
+            class2type[Object.prototype.toString.call(obj)] || "object" :
+            typeof obj;
+    }
+
+
+
 
 
     goToPage = ()=>{
@@ -95,13 +123,16 @@ export default class HomePage extends BasePage {
                 <TouchableOpacity style={styles.itemStyle} activeOpacity={0.7} onPress={()=>super.navigate('Web')}>
                     <Text style={styles.textStyle}>gotoWebview</Text>
                 </TouchableOpacity>
-                <TouchableOpacity activeOpacity={0.7} onPress={()=>
-                    this.setState({
-                        visible: !this.state.visible
-                    })}>
 
-                <View style={styles.itemStyle}/>
+                {/*<TouchableOpacity style={[styles.itemStyle]} activeOpacity={0.7} onPress={()=>super.navigate('WaterFall')}>*/}
+                    {/*<Text style={styles.textStyle}>瀑布流</Text>*/}
+                {/*</TouchableOpacity>*/}
+
+                <TouchableOpacity style={styles.itemStyle} activeOpacity={0.7} onPress={()=>super.navigate('WebAndroid')}>
+                    <Text style={styles.textStyle}>原生webview WebAndroid</Text>
                 </TouchableOpacity>
+
+
                 <View style={styles.itemStyle}/>
                 <View style={styles.itemStyle}/>
                 <View style={styles.itemStyle}/>
