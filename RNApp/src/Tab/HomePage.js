@@ -128,7 +128,7 @@ export default class HomePage extends BasePage {
                     {/*<Text style={styles.textStyle}>瀑布流</Text>*/}
                 {/*</TouchableOpacity>*/}
 
-                <TouchableOpacity style={styles.itemStyle} activeOpacity={0.7} onPress={()=>super.navigate('WebAndroid')}>
+                <TouchableOpacity style={styles.itemStyle} activeOpacity={0.7} onPress={()=>Platform.OS==='android'? super.navigate('WebAndroid'):null}>
                     <Text style={styles.textStyle}>原生webview WebAndroid</Text>
                 </TouchableOpacity>
 
