@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.common.MapBuilder;
 import com.facebook.react.uimanager.SimpleViewManager;
@@ -32,7 +33,8 @@ import java.util.Map;
 public class WebViewManager extends SimpleViewManager<BridgeWebView> {
 
     private final String TAG = "WebViewManager";
-    BridgeWebView webView;
+    static final int isCanBack = 1;
+    static BridgeWebView webView;
     ThemedReactContext reactContext;
 
     @Override
@@ -49,7 +51,7 @@ public class WebViewManager extends SimpleViewManager<BridgeWebView> {
         //很重要 fix白屏bug
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT);
         webView.setLayoutParams(params);
-        webView.registerHandler("onMessage", new BridgeHandler() {
+        webView.registerHandler("rhczbank_share", new BridgeHandler() {
             @Override
             public void handler(String data, CallBackFunction function) {
                 Log.i(TAG, "js调用原生 " + data);
@@ -68,7 +70,7 @@ public class WebViewManager extends SimpleViewManager<BridgeWebView> {
             WritableMap params = Arguments.createMap();
             params.putString("data",data);
             this.reactContext.getJSModule(RCTEventEmitter.class).receiveEvent(
-                    this.webView.getId(),//实例的ID native和js两个视图会依据getId()而关联在一起
+                    WebViewManager.this.webView.getId(),//实例的ID native和js两个视图会依据getId()而关联在一起
                     eventName,//事件名称
                     params
             );
@@ -89,6 +91,7 @@ public class WebViewManager extends SimpleViewManager<BridgeWebView> {
                 .put("onPageFinished", MapBuilder.of("registrationName", "onPageFinished"))
                 .put("onReceivedTitle", MapBuilder.of("registrationName", "onReceivedTitle"))
                 .put("onProgressChanged", MapBuilder.of("registrationName", "onProgressChanged"))
+                .put("onGoBack", MapBuilder.of("registrationName", "onGoBack"))
                 .build();
     }
 
@@ -98,6 +101,41 @@ public class WebViewManager extends SimpleViewManager<BridgeWebView> {
         webView.loadUrl(url);
     }
 
+//    @ReactProp(name = "isCanBack")
+//    public void isCanBack(final BridgeWebView webView,boolean flag) {//设置URL加载路径
+//        Log.i(TAG,"flag: "+flag);
+////        webView.canGoBack();
+//        Log.i(TAG,"webView.canGoBack(): "+webView.canGoBack());
+//    }
+
+//    public static boolean isCanBack(){
+//        if(WebViewManager.webView==null){
+//            return false;
+//        }
+//        return webView.canGoBack();
+//    }
+
+
+    @javax.annotation.Nullable
+    @Override
+    public Map<String, Integer> getCommandsMap() {
+        return MapBuilder.of("isCanBack",isCanBack);
+    }
+
+
+    @Override
+    public void receiveCommand(BridgeWebView root, int commandId, @javax.annotation.Nullable ReadableArray args) {
+        super.receiveCommand(root, commandId, args);
+        switch (commandId){
+            case isCanBack:
+                if(root.canGoBack()){
+                    root.goBack();
+                }else{
+                    this.dispatchEvent("onGoBack","onGoBack");
+                }
+                return;
+        }
+    }
 
     @ReactProp(name = "postMessage")
     public void postMessage(final BridgeWebView webView,String msg) {//这里setText应该高亮
@@ -110,9 +148,10 @@ public class WebViewManager extends SimpleViewManager<BridgeWebView> {
         });
     }
 
-
     @Override
     public void onDropViewInstance(BridgeWebView view) {//销毁实例执行
+        Log.i(TAG,"onDropViewInstance");
+        WebViewManager.webView = null;
         super.onDropViewInstance(view);
     }
 
@@ -174,3 +213,4 @@ public class WebViewManager extends SimpleViewManager<BridgeWebView> {
 
     };
 }
+

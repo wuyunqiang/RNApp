@@ -6,12 +6,15 @@ import {
     TouchableOpacity,
     Text,
     View,
+    UIManager,
     StyleSheet,
     NativeModules,
+    BackHandler,
     requireNativeComponent,
     Dimensions,
     DeviceEventEmitter,
 } from 'react-native';
+const ReactNative = require('ReactNative');
 import PropTypes from 'prop-types';
 let WebViewNative = requireNativeComponent('WebViewManager',H5WebView);
 export default class H5WebView extends Component {
@@ -25,7 +28,29 @@ export default class H5WebView extends Component {
         this.state = {
             msg:'test',
         };
+        BackHandler.addEventListener('hardwareBackPress', this.onBackAndroid);
     }
+
+    componentDidMount() {
+    }
+
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.onBackAndroid);
+    }
+
+
+    onBackAndroid = () => {
+        this.isCanBack();
+        return true; //返回true 拦截虚拟按键
+    }
+
+
+    //判断原生BridgeWebView 是否可以返回上一层
+    isCanBack = ()=>{
+        UIManager.dispatchViewManagerCommand(ReactNative.findNodeHandle(this),
+            UIManager.WebViewManager.Commands.isCanBack,[''])
+    };
 
     onMessage = (e)=>{
         let params = e.nativeEvent.data;
@@ -48,6 +73,12 @@ export default class H5WebView extends Component {
         Log('WebView e.nativeEvent.data: ', e.nativeEvent.data);
     }
 
+
+    //原生不能返回回调 路由返回到上一层
+    onGoBack = ()=>{
+        Log('WebView onGoBack:');
+    }
+
     render() {
         return (<WebViewNative
             ref={(c) => {this.WebViewNative = c;}}
@@ -59,6 +90,7 @@ export default class H5WebView extends Component {
             onReceivedTitle = {this.onReceivedTitle}
             onProgressChanged = {this.onProgressChanged}
             postMessage={this.state.msg}//发送给js的数据
+            onGoBack={this.onGoBack}  //原生不能返回回调 路由返回到上一层
         />)
     }
 }
@@ -72,4 +104,5 @@ WebViewNative.propTypes = {
     onPageFinished:PropTypes.func,
     onReceivedTitle:PropTypes.func,
     onProgressChanged:PropTypes.func,
+    onGoBack:PropTypes.func,
 };
