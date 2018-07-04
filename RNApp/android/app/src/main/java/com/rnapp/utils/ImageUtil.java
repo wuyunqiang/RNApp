@@ -61,7 +61,7 @@ import java.util.UUID;
  */
 
 public class ImageUtil {
-    private static final String IN_PATH = "/shandai/pic/";
+    private static final String IN_PATH = "/wuyunqiang/pic/";
 
     /**
      * Gets the corresponding path to a file from the given content:// URI

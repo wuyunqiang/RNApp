@@ -8,9 +8,13 @@ import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.WritableMap;
+import com.rnapp.MainActivity;
 import com.rnapp.utils.CodeUtils;
 import com.rnapp.utils.Utils;
+
+import javax.annotation.Nullable;
 
 /**
  * Created by wuyunqiang on 2018/1/2.
@@ -30,37 +34,40 @@ public class NativeUtil extends ReactContextBaseJavaModule {
         return "NativeUtil";
     }
 
-//    @ReactMethod
-//    public void StatusBar(final Promise promise) {
-//        final Activity activity = getCurrentActivity();
-//        if(activity!=null){
-//            activity.runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    Utils.init(activity.getApplication());
-//                    BarUtils.setStatusBarAlpha(activity, 0);
-//                    int height = BarUtils.getStatusBarHeight();
-//                    Log.i(TAG,height+"");
-//                }
-//            });
-//
-//        }
-//    }
-//
-//    @ReactMethod
-//    public void StatusBarHeigh(final Promise promise) {
-//        final Activity activity = getCurrentActivity();
-//        WritableMap params = Arguments.createMap();
-//        if(activity!=null){
-//            Utils.init(activity.getApplication());
-//            int height = BarUtils.getStatusBarHeight();
-//            params.putInt("StatusBarHeight",height);
-//            promise.resolve(params);
-//        }else{
-//            params.putInt("StatusBarHeight",0);
-//            promise.resolve(params);
-//        }
-//    }
+
+    @ReactMethod
+    public void Finish(final Promise promise) {
+        if (getCurrentActivity() != null) {
+            getCurrentActivity().finish();
+        }
+    }
+
+    @ReactMethod
+    public void Permission(@Nullable ReadableArray args, final Promise promise){
+        final WritableMap params = Arguments.createMap();
+        if(getCurrentActivity()==null){
+            params.putInt("code", -1);
+            params.putString("Permission", "getCurrentActivity()==null");
+            promise.resolve(params);
+            return;
+        }
+
+        if(args.size()<=0){
+            params.putInt("code", -1);
+            params.putString("Permission", "申请的权限列表为空");
+            promise.resolve(params);
+            return;
+        }
+
+        String[] list = new String[args.size()];
+        for (int i=0;i<args.size();i++){
+            list[i] = args.getString(i);
+        }
+        ((MainActivity)getCurrentActivity()).requestPermission(list,promise);
+    }
+
+
+
 
     @ReactMethod
     public void VerifyImage(String code, final Promise promise) {
